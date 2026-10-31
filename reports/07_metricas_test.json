@@ -1,0 +1,110 @@
+{
+  "decisiones": {
+    "modelo_final": "xgboost",
+    "parametros": {
+      "n_estimators": 300,
+      "learning_rate": 0.03,
+      "max_depth": 4,
+      "min_child_weight": 20,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8
+    },
+    "origen_parametros": "partida",
+    "variables": "referencia (12 variables conocidas al aprobar)",
+    "calibrar": false,
+    "metrica_principal": "recall de mora_30 con el umbral fijo elegido para precisión ≥ 20% (en validación)",
+    "regla_de_decision": "priorizar revisión si probabilidad ≥ 0.1927",
+    "umbral": 0.19270843267440796,
+    "baseline": "regla del plazo corto",
+    "umbral_baseline": 0.1111111111111111,
+    "congeladas_en": "2026-10-30T21:37:45"
+  },
+  "prueba": {
+    "recall de mora (métrica principal)": {
+      "modelo": [
+        0.14854299928926795,
+        0.12951150011229712,
+        0.1669023939037538
+      ],
+      "baseline": [
+        0.15422885572139303,
+        0.13509512384192113,
+        0.17236427363766418
+      ]
+    },
+    "precisión (exigida ≥ 20 %)": {
+      "modelo": [
+        0.19209558823529413,
+        0.16905135109789263,
+        0.21384792626728108
+      ],
+      "baseline": [
+        0.1891891891891892,
+        0.16755927920788205,
+        0.21020817231239394
+      ]
+    },
+    "PR-AUC": {
+      "modelo": [
+        0.17081209699818517,
+        0.15936138935293492,
+        0.18402988015007257
+      ],
+      "baseline": [
+        0.1706538988027326,
+        0.16042291146178347,
+        0.1827782866589701
+      ]
+    },
+    "AUC": {
+      "modelo": [
+        0.5267247027860221,
+        0.5085825541962358,
+        0.5435211339557638
+      ],
+      "baseline": [
+        0.5376953166719337,
+        0.5204135711492798,
+        0.5536294620095068
+      ]
+    }
+  },
+  "porcentaje_marcado": {
+    "modelo": 0.11835091917763516,
+    "baseline": 0.12476884586098118
+  },
+  "diferencias_modelo_menos_regla": {
+    "recall de mora": [
+      -0.005685856432125075,
+      -0.020159678351501616,
+      0.0096582065112695
+    ],
+    "PR-AUC": [
+      0.00015819819545256908,
+      -0.006669853183220995,
+      0.007999329284885339
+    ],
+    "AUC": [
+      -0.010970613885911584,
+      -0.027752580898029323,
+      0.00636455984963325
+    ]
+  },
+  "calibracion_reservados": {
+    "sin calibrar": {
+      "Brier": 0.13069,
+      "log loss": 0.43005,
+      "probabilidad media": 0.1618,
+      "tasa real": 0.15516
+    },
+    "isotónica": {
+      "Brier": 0.13071,
+      "log loss": 0.43016,
+      "probabilidad media": 0.16194,
+      "tasa real": 0.15516
+    }
+  },
+  "mora_real_prueba": 0.1530512346350484,
+  "n_prueba": 9193,
+  "clientes_prueba": 6932
+}

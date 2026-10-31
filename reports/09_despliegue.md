@@ -1,54 +1,64 @@
 # Despliegue de la app
 
-> Plantilla en blanco. Complétala durante la clase 5 (viernes 6 de noviembre), después de desplegar la app.
-> Guía paso a paso: `material-del-curso/guias/streamlit-despliegue.md` y `material-del-curso/kit/guia-despliegue-y-presentacion.md`.
+> Se completa en la clase 5 (viernes 6 de noviembre), después de desplegar. Lo marcado _(completar)_ lo llena el grupo.
 
 ## 1. Enlace y estado
 
 | Dato | Valor |
 |---|---|
-| Enlace público de la app | |
+| Enlace público de la app | _(completar)_ |
 | Plataforma | Streamlit Community Cloud |
-| Repo, rama y archivo principal | |
-| Versión de Python elegida | ☐ 3.12  ☐ otra → motivo: _______________ |
-| ¿Se comprobó en una **ventana privada**? | ☐ sí  ☐ no |
-| ¿Se desplegó? | ☐ sí  ☐ no → **plan B** (apartado 4) |
+| Repo, rama y archivo principal | _(usuario/repo)_ · `main` · `app/streamlit_app.py` |
+| Versión de Python elegida | ☒ 3.12  ☐ otra |
+| ¿Se comprobó en una **ventana privada**? | ☐ sí  ☐ no _(completar)_ |
+| ¿Se desplegó? | ☐ sí  ☐ no _(completar)_ |
+
+### Pasos para desplegar (≈ 10 minutos)
+
+1. Subir el repo a GitHub como **público** (sin `data/raw/`, `.env` ni `mlflow_local.db`: ya están en `.gitignore`). Comprobar que `models/model.joblib` y `models/input_schema.json` **sí** estén subidos.
+2. Entrar a <https://share.streamlit.io> con la cuenta de GitHub → **Create app** → *Deploy a public app from GitHub*.
+3. Repositorio: el del grupo · Rama: `main` · Archivo: `app/streamlit_app.py`.
+4. **Advanced settings → Python 3.12.** No hace falta ningún *secret*: la app no consulta Databricks.
+5. **Deploy.** La primera instalación tarda unos minutos (lee `requirements.txt` de la raíz).
+6. Abrir el enlace en una ventana privada y hacer las 4 pruebas de la sección 3.
 
 ## 2. Decisiones de despliegue y su motivo
 
 | Decisión | Motivo |
 |---|---|
-| La app carga `models/model.joblib` desde el repo y **no consulta Databricks** | |
-| Versiones fijadas en `requirements.txt` | |
-| Qué NO se subió al repo (y por qué) | |
-| | |
+| La app carga `models/model.joblib` desde el repo y **no consulta Databricks** | No se ponen credenciales en la nube y la app no depende de la cuota de Databricks Free Edition |
+| Versiones fijadas en `requirements.txt` (Python 3.12) | El modelo se entrenó con scikit-learn 1.9.1 y XGBoost 3.4.1: otra versión puede no cargar el `joblib` o predecir distinto |
+| Qué NO se subió al repo (y por qué) | `data/raw/` (base con nombres y documentos sintéticos), `data/processed/`, `.env` (credenciales), `mlflow_local.db` y `models/final_pipeline.joblib` (se regeneran) |
+| El formulario valida rangos posibles y acepta "No sé" | Un dato imposible se rechaza con un mensaje claro; un dato desconocido lo imputa el pipeline |
+| Aviso de uso responsable visible | La app apoya la priorización; no aprueba ni niega créditos |
 
 ## 3. Pruebas del enlace público
 
-| Caso | Datos usados | Resultado esperado | Resultado real |
-|---|---|---|---|
-| Normal | | | |
-| Límite (cambia la decisión) | | | |
-| Inválido (debe rechazarse con un mensaje claro) | | | |
-| Con un campo en «No sé» | | | |
+Resultados de la prueba **en local** (30-oct-2026, `streamlit run app/streamlit_app.py`). En el enlace público se repiten y se completa la última columna.
+
+| Caso | Datos usados | Resultado esperado | Resultado en local | Resultado en el enlace |
+|---|---|---|---|---|
+| Normal | Ejemplo "Crédito típico (36 meses)" | Seguimiento normal | 🟢 Seguimiento normal, 15,1 % | _(completar)_ |
+| Límite (cambia la decisión) | Ejemplo "Plazo corto (6 meses)" | Priorizar | 🔴 Priorizar, 23,5 % (1,46 × el promedio) | _(completar)_ |
+| Inválido | Plazo = −5 | Rechazo con mensaje | "Revisa los datos: Plazo (meses): debe estar entre 1 y 360" | _(completar)_ |
+| Con un campo en «No sé» | Tasa y ciudad en "No sé" | Responde igual | Responde (el pipeline imputa) | _(completar)_ |
+| Carga masiva | `Base_sintetica_creditos.csv` (60.000 créditos, formato del sistema) | Califica, excluye reestructurados, permite descargar | 56.381 calificados, 8.262 a priorizar (14,7 %), 3.619 excluidos; ~5 s | _(completar)_ |
 
 ## 4. Problemas encontrados y plan B
 
-- Errores de despliegue que aparecieron y cómo se resolvieron (qué decía el registro y qué se cambió): _______________
-- **Plan B** (si la app falla en vivo): captura con fecha y repo → `_______________`; app en local → `_______________`
-- Si **no se desplegó**: **plan de despliegue escrito** (qué se intentó, qué error dio, qué harían): _______________
+- **Errores de despliegue:** _(completar si aparecen)_. Los más comunes: versión de Python distinta de 3.12 (falla al instalar o al cargar el modelo) y `models/model.joblib` sin subir.
+- **Plan B:** captura de pantalla con fecha y repo → `presentacion/captura_app.png` _(completar)_; app en local → `streamlit run app/streamlit_app.py`.
 
 ## 5. Ensayo cronometrado (clase 5)
 
 | Parte | Tiempo previsto | Tiempo real |
 |---|---|---|
-| Caso de negocio | 2 min | |
-| App (demo en vivo) | 4 min | |
-| Resultados | 3 min | |
-| Cierre | 1 min | |
-| **Total** | **10 min** | |
+| Caso de negocio | 2 min | _(completar)_ |
+| App (demo en vivo) | 4 min | _(completar)_ |
+| Resultados | 3 min | _(completar)_ |
+| Cierre | 1 min | _(completar)_ |
+| **Total** | **10 min** | _(completar)_ |
 
-- ¿Se pasó de 10 minutos? ☐ no  ☐ sí → qué se recortó: _______________
-- Retroalimentación recibida (lo mejor y la corrección que propusieron): _______________
-- **Corrección concreta que hicimos por ella:** _______________
-- Quién habla de qué y quién responde las preguntas técnicas: _______________
+- ¿Se pasó de 10 minutos? _(completar)_
+- Retroalimentación recibida y corrección que hicimos: _(completar)_
+- Quién habla de qué y quién responde las preguntas técnicas: _(completar)_

@@ -85,7 +85,8 @@ def predict_with_scores(df: pd.DataFrame, model, schema: dict) -> pd.DataFrame:
     """Predice. Una fila de salida por fila de entrada.
 
     Columnas: decision, most_likely, proba_<clase>, needs_review y (si el esquema trae matriz de costos)
-    expected_cost. Las advertencias de validación quedan en `resultado.attrs["warnings"]`.
+    expected_cost. Si el esquema trae `threshold` (binario), la decisión es la clase positiva cuando su
+    probabilidad ≥ umbral, y se agrega `relative_risk` (probabilidad ÷ tasa base) si trae `base_rate`. Las advertencias de validación quedan en `resultado.attrs["warnings"]`.
     """
     warnings = validate_inputs(df, schema)
     class_names = schema["class_names"]
@@ -93,13 +94,27 @@ def predict_with_scores(df: pd.DataFrame, model, schema: dict) -> pd.DataFrame:
     most_likely = proba.argmax(axis=1)
 
     cost = schema.get("cost_matrix")
-    decision = decide_min_cost(proba, cost) if cost is not None else most_likely
+    threshold = schema.get("threshold")
+    if threshold is not None:
+        if len(class_names) != 2:
+            raise ValueError("El umbral solo aplica a clasificación binaria")
+        decision = (proba[:, 1] >= float(threshold)).astype(int)   # clase positiva si supera el umbral
+    elif cost is not None:
+        decision = decide_min_cost(proba, cost)
+    else:
+        decision = most_likely
 
     out = pd.DataFrame(proba, columns=[f"proba_{c}" for c in class_names], index=df.index)
     out.insert(0, "decision", [class_names[i] for i in decision])
     out["most_likely"] = [class_names[i] for i in most_likely]
-    if cost is not None:
+    if cost is not None and threshold is None:
         out["expected_cost"] = (proba @ np.asarray(cost, dtype=float))[np.arange(len(df)), decision]
-    out["needs_review"] = (proba.max(axis=1) < schema.get("review_threshold", 0.55)) | (decision != most_likely)
+    if threshold is not None:
+        # Con umbral: "revisar" = el puntaje está tan cerca del umbral que la decisión podría cambiar con poco
+        out["needs_review"] = np.abs(proba[:, 1] - float(threshold)) < schema.get("review_margin", 0.01)
+        if schema.get("base_rate"):
+            out["relative_risk"] = proba[:, 1] / float(schema["base_rate"])
+    else:
+        out["needs_review"] = (proba.max(axis=1) < schema.get("review_threshold", 0.55)) | (decision != most_likely)
     out.attrs["warnings"] = warnings
     return out

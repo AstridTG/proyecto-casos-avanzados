@@ -1,0 +1,20 @@
+{
+  "modelo_final": "xgboost",
+  "parametros": {
+    "n_estimators": 300,
+    "learning_rate": 0.03,
+    "max_depth": 4,
+    "min_child_weight": 20,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8
+  },
+  "origen_parametros": "partida",
+  "variables": "referencia (12 variables conocidas al aprobar)",
+  "calibrar": false,
+  "metrica_principal": "recall de mora_30 con el umbral fijo elegido para precisión ≥ 20% (en validación)",
+  "regla_de_decision": "priorizar revisión si probabilidad ≥ 0.1927",
+  "umbral": 0.19270843267440796,
+  "baseline": "regla del plazo corto",
+  "umbral_baseline": 0.1111111111111111,
+  "congeladas_en": "2026-10-30T21:37:45"
+}

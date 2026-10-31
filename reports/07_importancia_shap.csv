@@ -1,0 +1,44 @@
+,shap_medio_abs
+term_months,0.0819
+monthly_installment,0.04977
+loan_amount,0.04687
+interest_rate_ea,0.04045
+guarantee_value,0.02926
+product_120,0.01549
+city_BELLO - ANTIOQUIA,0.00898
+city_MEDELLIN - ANTIOQUIA,0.00757
+due_day,0.00666
+city_BOGOTA D.C. - BOGOTA,0.00647
+business_type_9,0.00636
+city_PEREIRA - RISARALDA,0.00534
+city_ENVIGADO - ANTIOQUIA,0.00391
+product_121,0.0039
+city_CAUCASIA - ANTIOQUIA,0.00357
+city_ITAGUI - ANTIOQUIA,0.00343
+city_CALDAS - ANTIOQUIA,0.00311
+city_MARINILLA - ANTIOQUIA,0.003
+business_type_486,0.00286
+product_128,0.00282
+city_GIRARDOTA - ANTIOQUIA,0.00247
+city_BARRANQUILLA - ATLANTICO,0.0024
+product_118,0.00226
+economic_destination_70046,0.00224
+city_CALI - VALLE,0.00221
+city_GUARNE - ANTIOQUIA,0.00185
+economic_destination_12013,0.00165
+city_SABANETA - ANTIOQUIA,0.00158
+has_cosigner,0.00158
+city_TURBO - ANTIOQUIA,0.0015
+city_RIONEGRO - ANTIOQUIA,0.00132
+product_117,0.00122
+city_BUCARAMANGA - SANTANDER,0.00117
+product_410,0.00091
+city_MANIZALES - CALDAS,0.00083
+city_COPACABANA - ANTIOQUIA,0.00061
+city_SONSON - ANTIOQUIA,0.00046
+city_APARTADO - ANTIOQUIA,0.00045
+economic_destination_12104,0.0003
+city_LA ESTRELLA - ANTIOQUIA,0.00023
+has_guarantee,0.0
+product_200,0.0
+business_type_1,0.0

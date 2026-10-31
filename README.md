@@ -1,47 +1,76 @@
-# proyecto-casos-avanzados
+# LibranzaRadar
 
-> **LibranzaRadar:** modelo de machine learning que, al aprobar un crédito de libranza, estima la probabilidad
-> de que caiga en más de 30 días de mora, para que el analista de crédito de una caja de compensación priorice
-> la revisión y el seguimiento con las empresas pagadoras desde un portal de autogestión (base sintética).
+> Prioriza a qué créditos de libranza aprobados dar revisión y seguimiento con la empresa pagadora, estimando la
+> probabilidad de que caigan en más de 30 días de mora. Para el analista de crédito de una caja de compensación,
+> que conserva la decisión final.
 
-**App desplegada:** _enlace público de Streamlit (se completa en la clase 5)_
+**App desplegada:** _(enlace público de Streamlit Community Cloud: se completa al desplegar, ver `reports/09_despliegue.md`)_
+
+## Resultado en una línea
+
+Con la información disponible **al aprobar**, la base sintética casi no permite anticipar la mora: el mejor modelo
+(XGBoost) ordena el riesgo apenas mejor que el azar (AUC ≈ 0,53), igual que una regla simple de "plazo corto = más
+riesgo". El proyecto entrega el flujo completo (datos → modelo → seguimiento → app) y lo dice con honestidad. Cifras de
+la prueba en `reports/07_validacion.md`.
 
 ## Qué contiene
-Estructura obligatoria del curso. Cada carpeta tiene un propósito:
 
 | Carpeta | Contenido |
 |---|---|
-| `.specify/` y `.claude/` | Entorno de IA: constitución del proyecto, Spec Kit (`/speckit-…`) y subagentes |
-| `specs/` | Lo que genera Spec Kit: `spec.md`, `plan.md`, `tasks.md` de cada pieza (aparece al usarlo) |
-| `especificaciones/` | Guías que se llenan **antes** de programar cada etapa |
-| `data/raw/` | Datos originales, intocables |
-| `data/processed/` | Datos limpios generados por el código |
-| `notebooks/` | Un notebook por etapa; solo orquestan |
-| `src/proyecto/` | Código reutilizable (data, features, models, tracking, inference) |
-| `tests/` | Pruebas con `pytest` |
-| `models/` | `model.joblib` y `ficha_modelo.md` |
-| `app/` | `streamlit_app.py` |
-| `reports/` | Una sección por hito e `informe_tecnico.md` |
-| `presentacion/` | `ejecutiva.md` (máximo 5 diapositivas) |
+| `especificacion-proyecto.md`, `especificaciones/` | Caso, métrica, riesgos y especificaciones de cada etapa |
+| `data/raw/` | `Base_sintetica_creditos.csv` (**no se sube**: tiene nombres y documentos sintéticos) |
+| `data/processed/` | Entrenamiento y prueba generados por el notebook 03 (no se versionan) |
+| `notebooks/` | 01 a 09, uno por etapa; solo orquestan |
+| `src/proyecto/` | `data/` (limpieza y partición por cliente), `features/`, `models/` (torneo, métrica de negocio, Optuna), `tracking/` (MLflow), `inference/` |
+| `tests/` | `pytest`: una prueba por regla de limpieza, partición, variables, métricas, inferencia, app y tracking |
+| `models/` | `model.joblib` (pipeline completo), `input_schema.json` y `ficha_modelo.md` |
+| `app/streamlit_app.py` | La app: pestaña **Un crédito** (formulario con explicación) y **Carga masiva** (sube un CSV/Excel con muchos créditos, en el formato del sistema de cartera o con las 12 columnas del modelo, y descarga la priorización) |
+| `reports/` | Una sección por etapa e `informe_tecnico.md` |
+| `presentacion/ejecutiva.md` | 5 diapositivas (Marp) |
 
 ## Cómo ejecutarlo
+
+Requiere Python 3.12 y [uv](https://docs.astral.sh/uv/) (o `python -m venv` + `pip`).
+
 ```bash
 uv venv --python 3.12 .venv
-uv pip install --python .venv/Scripts/python.exe -r requirements.txt   # en Mac/Linux: .venv/bin/python
-cp .env.example .env     # completa PROFILE o DATABRICKS_HOST y DATABRICKS_TOKEN
-python scripts/check_databricks.py
-pytest
+uv pip install --python .venv/Scripts/python.exe -r requirements.txt   # Mac/Linux: .venv/bin/python
+cp .env.example .env            # opcional: credenciales de Databricks; sin ellas se usa MLflow local
+# copia Base_sintetica_creditos.csv en data/raw/
+pytest -q                        # 49 pruebas (las del modelo real usan models/)
 streamlit run app/streamlit_app.py
 ```
 
-## De dónde viene este repositorio
-Nació de la rama `feature/estudiantes` del repositorio del curso (ver `LEEME-PRIMERO.md`): una persona del grupo la clonó con
-`git clone --branch feature/estudiantes --single-branch …`, la apuntó a este repo con `git remote set-url origin …` y hizo `push`. Los demás integrantes
-clonan **este** repositorio. Para arrancar, sigue `material-del-curso/guias/montaje-proyecto.md`.
+Para reproducir todo desde la base cruda, ejecuta los notebooks en orden (≈ 25 minutos en un portátil):
+
+```bash
+cd notebooks
+for n in 01_caso_negocio 02_eda 03_preprocesamiento 04_features 05_torneo 06_optimizacion 07_validacion_interpretacion 08_registro_modelo 09_inferencia; do
+  jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=3600 $n.ipynb
+done
+```
+
+En Windows (PowerShell) define antes `$env:PYTHONUTF8=1`.
+
+### Seguimiento de experimentos (MLflow)
+
+`src/proyecto/tracking/mlflow_utils.py` usa **Databricks** si `.env` tiene `PROFILE` o `DATABRICKS_HOST` + `DATABRICKS_TOKEN`,
+y **MLflow local** (`mlflow_local.db`) si no. Para ver los experimentos locales:
+
+```bash
+mlflow ui --backend-store-uri sqlite:///mlflow_local.db
+```
+
+Experimentos: `libranzaradar-04-features`, `-05-torneo`, `-06-optimizacion` (cada ensayo de Optuna es una ejecución
+anidada) y `-08-registro`. Modelo registrado: `libranzaradar_mora30`, alias `champion`.
 
 ## Equipo
+
 | Integrante | Rol |
 |---|---|
-| | |
+| _(completar)_ | Datos |
+| _(completar)_ | Modelado |
+| _(completar)_ | App |
+| _(completar)_ | Negocio y reporte |
 
-Especificación del proyecto: [`especificacion-proyecto.md`](especificacion-proyecto.md) · Especificaciones por etapa: [`especificaciones/`](especificaciones/)
+Especificación del proyecto: [`especificacion-proyecto.md`](especificacion-proyecto.md) · Informe técnico: [`reports/informe_tecnico.md`](reports/informe_tecnico.md)

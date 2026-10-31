@@ -1,0 +1,7 @@
+,negocio,AUC,PR-AUC,log loss
+xgboost,2,1,1,1
+lightgbm,3,3,2,3
+random forest,1,4,3,5
+línea base: regla del plazo corto,4,2,4,4
+regresión logística,5,5,5,6
+línea base: tasa de mora (sin modelo),6,6,6,2

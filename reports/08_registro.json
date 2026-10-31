@@ -1,0 +1,25 @@
+{
+  "plataforma": "local",
+  "experimento": "libranzaradar-08-registro",
+  "modelo_registrado": "libranzaradar_mora30",
+  "version": 1,
+  "alias": "champion",
+  "run_id": "cd7c622451dc4eda8fe975b10a69a1df",
+  "model_uri": "models:/m-2473bca9e60045a7b123902f48961b6e",
+  "columnas_entrada": [
+    "term_months",
+    "loan_amount",
+    "monthly_installment",
+    "interest_rate_ea",
+    "due_day",
+    "has_guarantee",
+    "guarantee_value",
+    "has_cosigner",
+    "product",
+    "business_type",
+    "economic_destination",
+    "city"
+  ],
+  "ida_y_vuelta_max_dif": 0.0,
+  "mlflow": "3.17.1"
+}

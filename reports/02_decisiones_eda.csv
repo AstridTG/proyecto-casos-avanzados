@@ -1,0 +1,10 @@
+,Hallazgo,Decisión,Motivo
+1,"49 columnas con datos personales (nombres, documentos, direcciones, teléfonos, codeudores)",Eliminarlas al cargar; el cliente pasa a un seudónimo (hash) solo para agrupar,Ley 1581; el modelo no las necesita
+2,63 columnas vacías o con un único valor,Eliminarlas,No pueden informar nada
+3,"DIAS DE MORA sin vacíos ni negativos; 19,0 % > 30 días",Objetivo mora_30 = DIAS DE MORA > 30,Definición de la ficha
+4,Créditos abiertos ago–oct 2026 con 0 % de mora,Exigir ≥ 4 meses de vida al corte (−10.331 créditos),"Sin exposición, 'nuevo' parecería 'buen pagador'"
+5,"Bloque de 3.619 créditos con plazo = 1, tasa 950 y 100 % de mora",Excluirlo,Sus condiciones se reescribieron después de la mora (fuga)
+6,"Saldos, pagos, intereses, estado y calificación con AUC 0,7–1,0",Usar solo 13 columnas conocidas al aprobar,Todo lo posterior a la aprobación es fuga
+7,12.627 clientes con más de un crédito,Partir y validar por cliente; crear prior_credits (créditos anteriores),Evitar fuga entre particiones; el historial sí se conoce al aprobar
+8,"Sexo y estado civil: 18,8 %–19,2 % de mora",No usarlos como variables,Atributos sensibles sin señal
+9,Afiliación del canal y utilizaciones: sin señal fuera del bloque,No usarlas,"Señal aparente venía de la fuga; estado actual, no del día de aprobación"

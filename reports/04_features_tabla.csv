@@ -1,0 +1,7 @@
+variante,PR-AUC,AUC,negocio (recall@P≥20%),mejora PR-AUC,mejora / ruido,decisión
+0 · referencia (condiciones del crédito),0.1800 ± 0.0041,0.5326,0.186 ± 0.075,0.0,0.0,referencia
+1 · + razones,0.1808 ± 0.0053,0.5369,0.143 ± 0.088,0.0008,0.47,descartar
+2 · + historial,0.1795 ± 0.0052,0.531,0.167 ± 0.108,-0.0005,-0.43,descartar
+3 · + empresa,0.1780 ± 0.0036,0.531,0.123 ± 0.036,-0.002,-1.16,descartar
+4 · + edad,0.1773 ± 0.0042,0.5288,0.098 ± 0.083,-0.0027,-2.45,descartar
+5 · todas las ideas,0.1781 ± 0.0030,0.5312,0.107 ± 0.062,-0.0019,-0.93,descartar

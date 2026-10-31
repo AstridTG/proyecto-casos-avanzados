@@ -2,66 +2,60 @@
 marp: true
 theme: default
 paginate: true
-header: "Presentación ejecutiva · TODO: nombre de tu startup"
+header: "Presentación ejecutiva · LibranzaRadar"
 footer: "Casos Avanzados · Maestría en Ingeniería Analítica"
 ---
 
-# 1 · Problema
+# 1 · ¿A qué créditos de libranza hay que hacerles seguimiento?
 
-<!-- TODO: borra las instrucciones de cada diapositiva y escribe lo tuyo. MÁXIMO 5 DIAPOSITIVAS: no agregues una sexta. -->
+- **Quién decide:** el analista de crédito de la caja de compensación.
+- **Qué decide:** a qué créditos recién aprobados dar **revisión y seguimiento prioritario** con la empresa pagadora.
+- **Costo de equivocarse:** no detectar una mora = pérdida de cartera y cobranza (el peor error). Marcar a un buen cliente = una revisión de más.
+- **Cada mes:** ≈ 2.400 créditos aprobados, ≈ 380 caerán en más de 30 días de mora.
 
-- **¿Quién decide?** TODO
-- **¿Qué decide con el resultado?** TODO
-- **¿Cuánto cuesta equivocarse** (y si cuesta distinto en cada dirección)? TODO
-
-> TODO: un titular que entienda alguien sin formación técnica. **No abras con el nombre del algoritmo.**
-
----
-
-# 2 · Enfoque
-
-<!-- TODO: una frase por idea. Lo técnico va al informe, no aquí. -->
-
-- **Los datos:** TODO (de dónde vienen y cuántos)
-- **Cómo se validó con honestidad:** TODO (por qué tu partición respeta la unidad de análisis)
-- **Qué se comparó y qué se eligió:** TODO
-- **Qué se descartó y por qué:** TODO (si una idea no funcionó, dilo: da credibilidad)
+> Queremos detectar el máximo de moras sin mandar a revisión a todo el mundo: **al menos 1 de cada 5 créditos priorizados debe caer en mora.**
 
 ---
 
-# 3 · Resultado y costo de negocio
+# 2 · Cómo lo resolvimos
 
-<!-- TODO: las cifras salen de reports/07_validacion.md. No inventes ni redondees a tu favor. -->
+- **Datos:** 60.000 créditos sintéticos de libranza (41.855 clientes). Quitamos datos personales al cargar.
+- **Solo lo que se sabe al aprobar:** plazo, monto, cuota, tasa, garantía, codeudor, producto y ciudad. Saldos, pagos y estado contienen la respuesta.
+- **Dos trampas que evitamos:** 3.619 créditos vencidos con el plazo **reescrito a 1 mes** y 10.331 créditos **demasiado nuevos** para caer en mora.
+- **Validación honesta:** partición **por cliente** y prueba abierta una sola vez.
+- **Comparamos 5 modelos** contra una regla de analista ("plazo corto = más riesgo"). La historia del cliente, la empresa pagadora y la edad **no aportaron**.
 
-| | Sin el modelo (punto de partida) | Con el modelo |
+---
+
+# 3 · Resultado: el modelo empata con la regla simple
+
+| Al mes (≈ 380 moras) | Regla: plazo ≤ 9 meses | Modelo (XGBoost) |
 |---|---|---|
-| Resultado en unidades de negocio | TODO | TODO |
-| Con TODO decisiones al mes | TODO | TODO |
+| Créditos priorizados | ≈ 296 | ≈ 280 |
+| Moras detectadas | ≈ 59 (15 %) | ≈ 56 (15 %) |
+| Precisión | 19 % | 19 % |
 
-- **Mejora y su intervalo o límite:** TODO
-- **La métrica técnica** (F1, AUC, RMSE…) va en una nota, no en el titular: TODO
+- Diferencia de recall modelo − regla: **−0,6 puntos**, IC 95 % [−2,0 ; +1,0]: **no hay mejora.**
+- Con lo que se sabe al aprobar, **8 de cada 10 moras no se pueden anticipar.**
+- *Nota técnica:* AUC 0,53 en prueba (0,50 = azar).
 
 ---
 
 # 4 · Demo de la app
 
-<!-- TODO: enlace público de tu app (ábrelo antes de exponer: puede estar dormida). -->
+**Enlace:** _(completar con el enlace público)_
 
-**Enlace:** TODO
+1. **Caso normal:** crédito a 36 meses → 🟢 seguimiento normal (15 %).
+2. **Caso límite:** crédito a 6 meses → 🔴 priorizar (23 %, 1,5 veces el promedio). La app muestra qué dato pesó: el plazo.
+3. **Dato inválido:** plazo = −5 → "Revisa los datos: Plazo (meses) debe estar entre 1 y 360".
 
-1. **Un caso normal:** TODO (qué datos escribes y qué responde)
-2. **Un caso límite:** TODO (uno que cambia la decisión)
-3. **Un dato inválido:** TODO (la app lo rechaza con un mensaje claro)
-
-> Plan B: captura de pantalla con fecha y la app en local.
+> Plan B: captura con fecha y la app en local (`streamlit run app/streamlit_app.py`).
 
 ---
 
 # 5 · Riesgos y siguientes pasos
 
-<!-- TODO: la diapositiva que más credibilidad da si es honesta. «No hay riesgos» no es una respuesta. -->
-
-- **Qué NO hace el modelo** (y qué decisión no debe tomar solo): TODO
-- **Límites de los datos:** TODO
-- **Uso responsable** (variables sensibles o reguladas): TODO
-- **Siguientes pasos:** TODO (una mejora concreta y qué vigilarían en producción)
+- **Qué NO hace:** no aprueba ni niega créditos, no fija tasas, no se usa para tratar distinto a un cliente. Decide el analista.
+- **Límites:** base **sintética**; mora medida al corte (exposiciones distintas); precisión en prueba 19 %, un poco por debajo del 20 % pedido.
+- **Uso responsable:** no usa sexo, estado civil ni edad. Vigilar las tasas de marcado por ciudad.
+- **Recomendación:** hoy, priorizar con la **regla del plazo corto** (transparente e igual de buena). Para mejorar de verdad, **capturar mejores datos al aprobar:** capacidad de pago, endeudamiento en centrales de riesgo, antigüedad laboral y salud de la empresa pagadora.

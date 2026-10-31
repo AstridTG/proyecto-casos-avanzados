@@ -1,0 +1,17 @@
+{
+  "ideas": [],
+  "columnas": [
+    "term_months",
+    "loan_amount",
+    "monthly_installment",
+    "interest_rate_ea",
+    "due_day",
+    "has_guarantee",
+    "guarantee_value",
+    "has_cosigner",
+    "product",
+    "business_type",
+    "economic_destination",
+    "city"
+  ]
+}

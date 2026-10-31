@@ -28,3 +28,10 @@ mlruns/
 
 # Modelo intermedio (pesado): solo se sube models/model.joblib
 models/final_pipeline.joblib
+
+# Datos procesados y estudios de Optuna: se regeneran con los notebooks 03 y 06
+data/processed/*
+!data/processed/.gitkeep
+
+# Ningún CSV suelto en la raíz: los datos originales van solo en data/raw/
+/*.csv

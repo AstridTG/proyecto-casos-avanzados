@@ -1,0 +1,18 @@
+{
+  "filas_crudas": 60000,
+  "columnas_crudas": 189,
+  "columnas_personales_eliminadas": 49,
+  "columnas_vacias_o_constantes": 63,
+  "filas_bloque_reestructurado": 3619,
+  "filas_sin_maduracion": 10331,
+  "fecha_corte": "2026-10-30",
+  "filas_finales": 46050,
+  "clientes_finales": 34657,
+  "tasa_mora_final": 0.15915309446254072,
+  "columnas_finales": 17,
+  "filas_entrenamiento": 36857,
+  "filas_prueba": 9193,
+  "clientes_entrenamiento": 27725,
+  "clientes_prueba": 6932,
+  "tasa_mora_entrenamiento": 0.16067504137612937
+}
