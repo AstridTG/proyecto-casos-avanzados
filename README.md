@@ -2,7 +2,7 @@
 
 > Modelo de machine learning sobre créditos de libranza (base sintética) para la iniciativa *Servicios
 > Financieros 2.0* de Comfama: ayudar a las empresas, desde la autogestión, y al área de cartera a priorizar
-> los créditos que requieren atención. *(Borrador: el objetivo exacto está por confirmar en
+> los créditos con mayor probabilidad de llegar a más de 30 días de mora. *(Borrador: por confirmar en
 > `especificacion-proyecto.md`.)*
 
 **App desplegada:** _enlace público de Streamlit (se completa en la clase 5)_

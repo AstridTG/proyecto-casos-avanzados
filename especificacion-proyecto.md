@@ -4,7 +4,7 @@
 > código: lo que escriban aquí manda sobre cualquier otra suposición.
 >
 > **Estado de este borrador (30 oct 2026):** las cifras de la sección 3 se midieron directamente sobre
-> `data/Base_sintetica_creditos.csv`. Lo marcado **PROPUESTA – por confirmar** o **POR DEFINIR** es una
+> `data/raw/Base_sintetica_creditos.csv`. Lo marcado **PROPUESTA – por confirmar** o **POR DEFINIR** es una
 > decisión del grupo que todavía no se ha tomado.
 
 ## 1. Grupo
@@ -28,14 +28,15 @@ gestión basada en datos) e inclusión y equidad (acceso digital a servicios fin
 colaboradores).
 
 - **Pregunta de negocio** (PROPUESTA – por confirmar): ¿qué créditos de libranza tienen más probabilidad de
-  caer en el evento de riesgo definido como objetivo, para que la empresa (desde la autogestión) y el área de
-  cartera actúen a tiempo?
+  llegar a **más de 30 días de mora**, para que la empresa (desde la autogestión) y el área de cartera actúen
+  a tiempo?
 - **¿Quién usará el resultado y qué decisión tomará con él?** (PROPUESTA – por confirmar): el equipo de cartera
   y servicio de Servicios Financieros, y las empresas en el portal de autogestión, para priorizar a qué
   créditos o colaboradores contactar primero. La persona conserva la decisión final.
-- **¿Qué cuesta equivocarse?** POR DEFINIR cuando se confirme el objetivo. En general: no detectar un crédito
-  en riesgo aumenta la cartera vencida y la provisión; marcar como riesgoso un crédito sano genera gestiones
-  innecesarias y una mala experiencia para la empresa y el colaborador.
+- **¿Qué cuesta equivocarse?** (PROPUESTA – por confirmar) El error peor es **no detectar** un crédito que
+  llegará a más de 30 días de mora: aumenta la cartera vencida y la provisión. Marcar como riesgoso un
+  crédito sano genera gestiones innecesarias y una mala experiencia para la empresa y el colaborador. Los
+  valores de cada costo: POR DEFINIR.
 
 ## 3. Datos
 
@@ -47,18 +48,17 @@ colaboradores).
 - **Unidad de análisis:** un **crédito** (`NUMERO DE LA COLOCACION` es único en las 60.000 filas).
   El 79,9 % (47.931) son libranza a través de una empresa (`DESCRIPCION DEL CANAL`, 421 valores); el resto
   aparecen como `PAGO PERSONAL` (12.069).
-- **Variable objetivo** (PROPUESTA – por confirmar): `EVENTO` (0/1). Distribución: 1 = 28.260 (47,1 %),
-  0 = 28.121 (46,9 %), vacío = 3.619 (6,0 %). **Su significado no está documentado.** En los datos, los
-  créditos con `EVENTO` = 0 y = 1 tienen la misma mora (26,7 % vs 26,5 % con mora > 0) y la misma
-  distribución de estados, y las 3.619 filas vacías son exactamente los créditos `VENCIDOS (+181 días)`.
-  El grupo debe confirmar qué es `EVENTO` antes de usarlo. Alternativa: un objetivo construido a partir de
-  la mora (por ejemplo, mora > 30 días: 19,0 % de los créditos), definiendo bien la fecha de corte para
-  evitar fuga (ver sección 5).
-- **Tipo de problema:** ☒ clasificación  ☐ regresión  ☐ clusterización (binaria, si se confirma `EVENTO`)
+- **Variable objetivo** (PROPUESTA – por confirmar): `EN_RIESGO` = 1 si `DIAS DE MORA` > 30, si no 0. Es una
+  columna **construida**, no viene en el archivo. Distribución: 1 = 11.397 (19,0 %), 0 = 48.603 (81,0 %).
+  En libranza es 13,8 % y en pago personal 39,6 %.
+- **Columna `EVENTO`: se omite.** Su significado no está documentado y en los datos no se relaciona con la mora
+  (26,7 % vs 26,5 % de créditos con mora > 0 en cada clase). Se elimina al cargar y no se usa ni como objetivo
+  ni como variable.
+- **Tipo de problema:** ☒ clasificación  ☐ regresión  ☐ clusterización (binaria y desbalanceada: 19 % positivos)
 - **¿Una misma entidad (cliente, paciente, empresa) aparece en varias filas?** ☐ no  ☒ sí → hay 41.855
   clientes distintos (`NUMERO DE IDENTIFICACION`): 29.228 con un crédito, 8.385 con 2, 2.966 con 3 y 1.276
   con 4. La partición será **por cliente** (`NUMERO DE IDENTIFICACION`) con `GroupKFold` /
-  `StratifiedGroupKFold`. En 6.819 clientes, `EVENTO` cambia entre sus créditos.
+  `StratifiedGroupKFold`. En 4.669 clientes, el objetivo cambia entre sus créditos.
 - **Datos personales o confidenciales presentes:** ☐ no  ☒ sí → nombres (`NOMBRE O RAZON SOCIAL`,
   `NOMBRE CODEUDOR…`), documentos (`NUMERO DE IDENTIFICACION`, las dos `NUMERO DE IDENTIFICACION DEL`,
   `DIGITO DE CHEQUEO`, `NRO IDENTIDAD CODEUDOR…`), direcciones (`DIRECCION LINEA 1`, `DIRECCION CODEUDOR`,
@@ -71,21 +71,28 @@ colaboradores).
 
 ## 4. Métrica
 
-- **Métrica principal:** POR DEFINIR (depende del objetivo).   **Por qué esa y no otra:** POR DEFINIR.
-  PROPUESTA: si el objetivo es de riesgo, usar un **costo esperado** con una matriz de costos del negocio, o
-  **recall de la clase en riesgo** con un mínimo de precisión, porque no detectar un crédito en riesgo
-  cuesta más que gestionar uno de más.
-- **Métricas secundarias:** PROPUESTA: AUC-ROC, F1 y precisión de la clase positiva.
-- **Línea base:** con `EVENTO`, predecir siempre la clase mayoritaria da ≈ 50 % de exactitud (las clases
-  están balanceadas). Por eso la exactitud no sirve como métrica principal.
+- **Métrica principal:** POR DEFINIR.   **Por qué esa y no otra:** POR DEFINIR.
+  PROPUESTA: **recall de `EN_RIESGO` = 1** con una precisión mínima acordada, o un **costo esperado** con una
+  matriz de costos del negocio, porque no detectar un crédito en riesgo cuesta más que gestionar uno de más.
+- **Métricas secundarias:** PROPUESTA: AUC-PR (mejor que AUC-ROC con 19 % de positivos), F1 y precisión de
+  la clase positiva.
+- **Línea base:** predecir siempre "no en riesgo" da 81,0 % de exactitud y 0 % de recall. Por eso la
+  exactitud no sirve como métrica principal.
 
 ## 5. Riesgos
 
-- **Fuga de información posible:** muchas columnas describen el estado **actual** del crédito (`DIAS DE MORA`,
-  `ESTADO DEL PRESTAMO`, `DESCRIPCION DEL ESTADO`, `CALIFICACION CARTERA`, `CAJA DE MORA A LA FECHA`,
-  `NRO CUOTAS VENCIDAS`, intereses de mora, `FECHA EFEC ULTIMO PAGO`, `VLR ULTIMO PAGO`…). Si el objetivo se
-  conoce en la misma fecha de corte, estas columnas pueden contener la respuesta. Además, los vacíos de
-  `EVENTO` coinciden 100 % con `VENCIDOS (+181)`.
+- **Fuga de información (confirmada):** como `EN_RIESGO` sale de `DIAS DE MORA`, las columnas que describen la
+  mora **actual** contienen la respuesta y **se excluyen del modelo**. Medido: `CAJA DE MORA A LA FECHA` = 1 →
+  0 % en riesgo y 2 a 7 → 100 %; `CALIFICACION CARTERA` B a E → 100 %; `DESCRIPCION DEL ESTADO` `SUBNORMAL`,
+  `DUDOSO`, `DIFICIL COBRO` y `VENCIDOS` → 100 %, y `VIGENTE` y `CANCELADO` → 0 %; `NRO CUOTAS VENCIDAS` = 0 →
+  0 % y ≥ 2 → 100 %. También se excluyen `DIAS DE MORA` (de ahí sale el objetivo) y `ESTADO DEL PRESTAMO`
+  (código de `DESCRIPCION DEL ESTADO`).
+  **Sospechosas, sin medir todavía** (se miden con y sin ellas en la etapa 4, con el subagente
+  `auditor-de-fuga`): `FEC CUOTA MAS ANTIG PEND PAG`, `VLR MORA PAGO MINIMO`, `INT. MORA PAGO TOTAL`,
+  `INT MORA EN PESOS 1-6`, `T.INT.MORA EN PESOS`, `VLR MINIMO DE PAGO`, `VLR CAPITA DEBIDO`,
+  `VLR INT CORR. DEBIDO`, `FECHA EFEC ULTIMO PAGO`, `VLR ULTIMO PAGO` y `VALOR SALDO SIN FECHA CORTE`.
+- **Calidad del objetivo:** 386 créditos marcados `NORMAL (1-30)` / calificación `A` tienen más de 30 días de
+  mora. Revisar en el EDA.
 - **Sesgos o equidad:** hay `SEXO` (2: 30.179 / 1: 29.821), `EDAD DEL CLIENTE` (19-72 años, mediana 45) y
   `ESTADO CIVIL`. Revisar que el modelo no discrimine por estas variables (pilar de inclusión y equidad).
 - **Datos faltantes o de mala calidad:** 26 columnas vacías, 72 constantes, nombres de columna repetidos,
@@ -109,3 +116,6 @@ colaboradores).
 |---|---|---|
 | 2026-10-30 | El CSV no se sube al repositorio público hasta confirmar el permiso de uso | Contiene nombres, documentos, direcciones y teléfonos (aunque sean sintéticos) y nombres de empresas |
 | 2026-10-30 | La partición será por cliente (`NUMERO DE IDENTIFICACION`) | 12.627 clientes tienen entre 2 y 4 créditos |
+| 2026-10-30 | Se omite la columna `EVENTO` (ni objetivo ni variable) | Significado no documentado y sin relación con la mora en los datos |
+| 2026-10-30 | Objetivo propuesto: `EN_RIESGO` = `DIAS DE MORA` > 30 (por confirmar) | Reemplaza a `EVENTO`; es medible y está ligado a la gestión de cartera |
+| 2026-10-30 | Se excluyen `DIAS DE MORA`, `ESTADO DEL PRESTAMO`, `DESCRIPCION DEL ESTADO`, `CALIFICACION CARTERA`, `CAJA DE MORA A LA FECHA` y `NRO CUOTAS VENCIDAS` | Fuga confirmada: separan el objetivo al 100 % (ver sección 5) |
