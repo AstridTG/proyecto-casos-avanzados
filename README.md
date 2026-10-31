@@ -37,7 +37,7 @@ uv venv --python 3.12 .venv
 uv pip install --python .venv/Scripts/python.exe -r requirements.txt   # Mac/Linux: .venv/bin/python
 cp .env.example .env            # opcional: credenciales de Databricks; sin ellas se usa MLflow local
 # copia Base_sintetica_creditos.csv en data/raw/
-pytest -q                        # 49 pruebas (las del modelo real usan models/)
+pytest -q                        # 55 pruebas (las del modelo real usan models/)
 streamlit run app/streamlit_app.py
 ```
 
@@ -51,6 +51,18 @@ done
 ```
 
 En Windows (PowerShell) define antes `$env:PYTHONUTF8=1`.
+
+**Windows: error al cargar LightGBM.** Si `import lightgbm` (notebooks 08 y 09, o la app) falla con
+`Could not find module '...lib_lightgbm.dll' (or one of its dependencies)`, falta el **Microsoft Visual C++
+2015-2022 Redistributable (x64)**, que trae `vcomp140.dll`. Instálalo con el instalador oficial
+<https://aka.ms/vs/17/release/vc_redist.x64.exe>, o desde PowerShell como administrador:
+
+```powershell
+winget install Microsoft.VCRedist.2015+.x64 --source winget --accept-source-agreements --accept-package-agreements
+```
+
+Si al final pide reiniciar, puedes elegir *Close*. Comprueba con
+`python -c "import lightgbm; print(lightgbm.__version__)"` (debe mostrar la versión, sin error).
 
 ### Seguimiento de experimentos (MLflow)
 
