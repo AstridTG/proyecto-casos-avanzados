@@ -21,7 +21,7 @@
 | Columna | Qué es | Se elimina en | Prueba que lo verifica |
 |---|---|---|---|
 | NOMBRE O RAZON SOCIAL, NOMBRE CODEUDOR (1–3) | Nombres | `load_raw()` → `drop_personal_data` | `test_personal_data_is_removed_and_client_is_pseudonymized`, `test_load_raw_never_returns_personal_columns` |
-| NUMERO DE IDENTIFICACION (y parciales), DIGITO DE CHEQUEO, NRO IDENTIDAD CODEUDOR (1–3) | Documentos | idem (el del cliente pasa a hash `client_id`; el del codeudor a `has_cosigner`) | idem |
+| NUMERO DE IDENTIFICACION (y parciales), DIGITO DE CHEQUEO, NRO IDENTIDAD CODEUDOR (1–3) | Documentos | idem (el del cliente pasa a número de cliente `client_id` (`c00001`...); el del codeudor a `has_cosigner`) | idem |
 | DIRECCION LINEA 1–3, DIRECCION CODEUDOR*, DIRECCION GARANTIA, ZONA POSTAL | Direcciones | idem | idem |
 | TELEFONO 1–3, TELEFONO CODEUDOR* | Teléfonos | idem | idem |
 

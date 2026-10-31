@@ -30,7 +30,7 @@ MIN_PRECISION = 0.20
 MIN_SEASONING_MONTHS = 4
 
 # ---------------------------------------------------------------- datos personales (se eliminan al cargar)
-# El identificador del cliente se reemplaza por un seudónimo (hash) que solo sirve para agrupar.
+# El identificador del cliente se reemplaza por un número de cliente (c00001...) que solo sirve para agrupar.
 CLIENT_ID_RAW = "NUMERO DE IDENTIFICACION"
 COSIGNER_ID_RAW = "NRO IDENTIDAD CODEUDOR"
 PII_COLUMNS = [

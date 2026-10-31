@@ -50,6 +50,13 @@ def test_personal_data_is_removed_and_client_is_pseudonymized():
     assert out["has_cosigner"].tolist() == [0, 1, 0]
 
 
+def test_client_id_is_appearance_order_and_does_not_depend_on_document():
+    out = C.drop_personal_data(raw_rows())
+    other = C.drop_personal_data(raw_rows(**{"NUMERO DE IDENTIFICACION": [987654321, 987654321, 12345678]}))
+    assert out[GROUP_COL].tolist() == ["c00001", "c00001", "c00002"]
+    assert other[GROUP_COL].tolist() == out[GROUP_COL].tolist()  # otros documentos, mismos números
+
+
 def test_load_raw_never_returns_personal_columns(tmp_path):
     path = tmp_path / "base.csv"
     raw_rows().to_csv(path, index=False)

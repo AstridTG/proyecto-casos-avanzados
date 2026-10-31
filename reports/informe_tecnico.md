@@ -29,7 +29,7 @@ LibranzaRadar quería que el analista de crédito supiera, **al aprobar** un cr�
   - **Fuga por columnas posteriores:** saldos, pagos, intereses, estado y calificación tienen AUC de 0,55 a 1,00 por sí solos → se conservan **solo 13 columnas conocidas al aprobar**.
   - **Unidades:** la tasa venía multiplicada por 10⁷ → se pasa a % EA.
   - **Columnas sin información:** 98 vacías o constantes → eliminadas.
-- **Datos personales:** 49 columnas (nombres, documentos, direcciones, teléfonos, codeudores) se eliminan **al cargar** (`load_raw`). El documento se reemplaza por un hash irreversible usado solo para agrupar. Sexo y estado civil no se usan (sensibles y sin señal). La base cruda no se sube al repo.
+- **Datos personales:** 49 columnas (nombres, documentos, direcciones, teléfonos, codeudores) se eliminan **al cargar** (`load_raw`). El documento se reemplaza por un número de cliente (`c00001`...) que no se calcula a partir de él y se usa solo para agrupar (ver `reports/01_eda.md`, cambio en la decisión 1). Sexo y estado civil no se usan (sensibles y sin señal). La base cruda no se sube al repo.
 - **Resultado:** 46.050 créditos de 34.657 clientes, 15,9 % en mora, 17 columnas.
 
 ## 3. Variables

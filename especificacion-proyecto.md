@@ -25,7 +25,7 @@ Nombre de la "startup": **LibranzaRadar**   Repositorio (público): _(completar 
 - **Variable objetivo:** `mora_30` = 1 si `DIAS DE MORA` > 30.
 - **Tipo de problema:** ☒ clasificación  ☐ regresión  ☐ clusterización
 - **¿Una misma entidad aparece en varias filas?** ☐ no  ☒ sí → la partición será por: **cliente** (`client_id`, seudónimo del documento).
-- **Datos personales o confidenciales presentes:** ☐ no  ☒ sí → se eliminan al cargar (`load_raw`): nombres, documentos, direcciones, teléfonos y codeudores (49 columnas). El documento se reemplaza por un hash irreversible.
+- **Datos personales o confidenciales presentes:** ☐ no  ☒ sí → se eliminan al cargar (`load_raw`): nombres, documentos, direcciones, teléfonos y codeudores (49 columnas). El documento se reemplaza por un número de cliente (`c00001`...) que no se calcula a partir de él (sin clave secreta).
 - **Licencia o permiso de uso de los datos:** base sintética entregada por el curso para uso académico.
 
 ## 4. Métrica

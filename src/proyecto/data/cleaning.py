@@ -1,7 +1,7 @@
 """Limpieza de la base de cartera de libranza: una función por decisión del EDA (reports/01_eda.md).
 
 Orden de `clean(df)`:
-  1. `drop_personal_data`     — seudonimiza al cliente, crea `has_cosigner` y elimina datos personales.
+  1. `drop_personal_data`     — numera al cliente (`client_id`), crea `has_cosigner` y elimina datos personales.
   2. `drop_empty_and_constant`— quita columnas vacías o con un solo valor.
   3. `add_target`             — mora_30 = DIAS DE MORA > 30.
   4. `add_prior_credits`      — créditos que el cliente ya tenía al pedir este (se calcula con la base completa).
@@ -14,8 +14,6 @@ Ninguna función modifica el DataFrame que recibe: todas devuelven una copia.
 """
 from __future__ import annotations
 
-import hashlib
-
 import numpy as np
 import pandas as pd
 
@@ -24,9 +22,6 @@ from proyecto.config import (
     PII_PREFIXES, PLAUSIBLE_RANGE, RAW_CSV, TARGET,
 )
 
-_SALT = "libranzaradar-2026"  # fija para que el mismo cliente reciba siempre el mismo seudónimo
-
-
 def load_raw(path=RAW_CSV) -> pd.DataFrame:
     """Lee el CSV crudo y elimina los datos personales en el MISMO paso: nunca circulan por el proyecto."""
     df = pd.read_csv(path, low_memory=False)
@@ -34,8 +29,13 @@ def load_raw(path=RAW_CSV) -> pd.DataFrame:
 
 
 def pseudonymize(values: pd.Series) -> pd.Series:
-    """Reemplaza un identificador por un seudónimo irreversible (hash SHA-256 truncado)."""
-    return values.astype(str).map(lambda v: hashlib.sha256(f"{_SALT}:{v}".encode()).hexdigest()[:16])
+    """Numera a los clientes por orden de aparición (c00001, c00002...): el mismo documento, el mismo número.
+
+    El número no se calcula a partir del documento, así que no hay forma de volver a él y no hace falta clave.
+    El mismo archivo da siempre los mismos números; en otro archivo un cliente podría recibir otro número.
+    """
+    codes, _ = pd.factorize(values.astype(str).str.strip())
+    return pd.Series([f"c{code + 1:05d}" for code in codes], index=values.index)
 
 
 def personal_columns(columns) -> list[str]:

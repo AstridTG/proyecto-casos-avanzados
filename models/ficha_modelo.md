@@ -13,7 +13,7 @@ Estima la probabilidad de que un crédito de libranza recién aprobado caiga en 
 - **Fuente y licencia:** base **sintética** de cartera de libranza generada para el curso (uso académico).
 - **Tamaño:** 36.857 créditos de 27.725 clientes (entrenamiento) y 9.193 créditos de 6.932 clientes (prueba). Vienen de 46.050 créditos tras excluir 3.619 con condiciones reescritas después de la mora y 10.331 con menos de 4 meses de vida.
 - **Partición:** por **cliente** (`GroupShuffleSplit` 80/20, semilla 42; validación con `StratifiedGroupKFold`). La prueba se abrió una sola vez (con una reejecución declarada por un error de código; ver `reports/07_validacion.md`).
-- **Datos personales:** se eliminan al cargar 49 columnas (nombres, documentos, direcciones, teléfonos, codeudores). El cliente se reemplaza por un hash irreversible que solo sirve para agrupar.
+- **Datos personales:** se eliminan al cargar 49 columnas (nombres, documentos, direcciones, teléfonos, codeudores). El cliente se reemplaza por un número de cliente (`c00001`...) que no se calcula a partir del documento y solo sirve para agrupar.
 
 ## Rendimiento (prueba: clientes nunca vistos)
 

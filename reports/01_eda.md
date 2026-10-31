@@ -13,7 +13,7 @@
 
 ## Calidad de los datos
 
-- **49 columnas con datos personales:** nombres, documentos (del cliente y de 3 codeudores), direcciones, teléfonos y dirección de la garantía. Se eliminan al cargar; el cliente pasa a un seudónimo (`client_id`, hash SHA-256) que solo sirve para agrupar.
+- **49 columnas con datos personales:** nombres, documentos (del cliente y de 3 codeudores), direcciones, teléfonos y dirección de la garantía. Se eliminan al cargar; el cliente pasa a un número de cliente (`client_id` = `c00001`, `c00002`... por orden de aparición) que solo sirve para agrupar.
 - **98 columnas vacías o constantes** en la base cruda (63 después de quitar las personales): moneda, agencia, cuenta, gestor, cargos fijos y todas las columnas en UVR, entre otras.
 - **Sin duplicados:** 0 filas duplicadas y 0 números de crédito repetidos.
 - **Objetivo completo:** `DIAS DE MORA` sin vacíos ni negativos. `CALIFICACION CARTERA` está vacía en el 3,6 %, pero es posterior a la aprobación y no se usa.
@@ -41,6 +41,19 @@
 | 8 | Sexo (15,8 % vs 16,1 %) y estado civil (15,5 %–16,3 %) sin relación con la mora | No usarlos como variables | Atributos sensibles sin señal | `select_approval_columns` |
 | 9 | Afiliación del canal y utilizaciones: sin señal fuera del bloque | No usarlas | La señal aparente venía de la fuga; son estados actuales, no del día de aprobación | `select_approval_columns` |
 | 10 | Valores fuera de rango posible (p. ej. edad 7) en la app | Dejarlos vacíos (el Pipeline imputa) sin borrar la fila | No inventar ni descartar información | `flag_impossible_values` |
+
+### Cambio en la decisión 1 (2026-10-31): número de cliente en vez de hash
+
+- **Antes:** `client_id` era un hash SHA-256 del documento con una "sal" escrita en el código. Como la sal es pública
+  en el repositorio y las cédulas tienen 7 a 10 dígitos, cualquiera podía recuperar el documento probando números.
+- **Ahora:** `client_id` es un número por orden de aparición en el archivo (`c00001`, `c00002`...). No se calcula a
+  partir del documento, así que no se puede revertir, y no necesita clave secreta (el grupo decidió no usar una).
+- **Por qué alcanza:** `client_id` solo se usa para agrupar (partición, validación cruzada y `prior_credits`); el
+  modelo y la app no lo usan. El mismo CSV da siempre los mismos números, así que la partición es reproducible.
+- **Efecto pendiente:** al cambiar los códigos cambia qué clientes caen en prueba. El `models/model.joblib` y los
+  resultados de `reports/` (etapas 03 a 08) se generaron con la partición anterior y **no se regeneraron**, para no
+  abrir de nuevo el conjunto de prueba. La nueva numeración rige desde la próxima vez que el grupo regenere el
+  proyecto completo.
 
 ## Hallazgo central: la señal al aprobar es débil
 
