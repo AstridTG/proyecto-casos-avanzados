@@ -1,9 +1,8 @@
 # proyecto-casos-avanzados
 
-> Modelo de machine learning sobre créditos de libranza (base sintética) para la iniciativa *Servicios
-> Financieros 2.0* de Comfama: ayudar a las empresas, desde la autogestión, y al área de cartera a priorizar
-> los créditos con mayor probabilidad de llegar a más de 30 días de mora. *(Borrador: por confirmar en
-> `especificacion-proyecto.md`.)*
+> **LibranzaRadar:** modelo de machine learning que, al aprobar un crédito de libranza, estima la probabilidad
+> de que caiga en más de 30 días de mora, para que el analista de crédito de una caja de compensación priorice
+> la revisión y el seguimiento con las empresas pagadoras desde un portal de autogestión (base sintética).
 
 **App desplegada:** _enlace público de Streamlit (se completa en la clase 5)_
 

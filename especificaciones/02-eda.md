@@ -44,12 +44,14 @@ Marquen lo que aplica a su dataset. Lo que no aplique se tacha **con una razón*
 - **Filas × columnas:** 60.000 × 189 (26 vacías al 100 %, 72 constantes, 91 con información)
 - **Unidad de análisis (una frase):** un crédito (colocación) de consumo o libranza; el 79,9 % se paga a
   través de una empresa.
-- **Columna que identifica a la entidad (`ID_COL`):** `NUMERO DE IDENTIFICACION` (cliente)   **¿Se repite?**
+- **Columna que identifica a la entidad (`ID_COL`):** `id_cliente` (código anónimo de `NUMERO DE IDENTIFICACION`)   **¿Se repite?**
   ☐ no ☒ sí, de 1 a 4 créditos por cliente (41.855 clientes; 12.627 con más de uno)
-- **Objetivo (`TARGET`):** `EN_RIESGO` = `DIAS DE MORA` > 30 (PROPUESTA – por confirmar; columna construida).
+- **Objetivo (`TARGET`):** `mora_30` = 1 si `DIAS DE MORA` > 30 (columna construida; ficha de caso).
   `EVENTO` se omite.   **Distribución:** 1 = 11.397 (19,0 %), 0 = 48.603 (81,0 %); libranza 13,8 %, pago
   personal 39,6 %
-- **Línea base** (regla trivial) y su resultado: siempre "no en riesgo" → 81,0 % de exactitud y 0 % de recall
+- **Línea base** (regla trivial) y su resultado: nunca predecir mora → 81,0 % de exactitud y 0 % de recall
+- **Créditos demasiado recientes:** 2.144 (3,6 %) se abrieron hace menos de 30 días y no pueden tener aún
+  `mora_30` = 1. Qué haremos: POR DEFINIR (excluirlos o exigir una antigüedad mínima)
 - **Vacíos en el objetivo:** 0 (`DIAS DE MORA` no tiene vacíos)   **Qué haremos con esas filas:** no aplica.
   Pendiente: revisar los 386 créditos `NORMAL (1-30)` / calificación `A` con más de 30 días de mora.
 - **Datos personales encontrados:** nombres, documentos, dígito de chequeo, direcciones y teléfonos de
@@ -72,9 +74,9 @@ Marquen lo que aplica a su dataset. Lo que no aplique se tacha **con una razón*
 | # | Hallazgo (con cifra) | Decisión | Motivo | Función que la implementa |
 |---|---|---|---|---|
 | 1 | 26 columnas 100 % vacías y 72 con un solo valor | Eliminarlas al cargar | No aportan información y hacen más pesado el modelo | `drop_uninformative_columns` |
-| 2 | Datos personales en ~20 columnas (nombres, documentos, direcciones, teléfonos de clientes y codeudores) | Crear un ID anónimo del cliente y eliminar todas las columnas personales | Regla 2 del proyecto y criterio 8 del dataset | `anonymize_and_drop_pii` |
+| 2 | 52 columnas con datos personales (nombres, documentos, dígito de chequeo, direcciones y teléfonos de clientes y codeudores, dirección de la garantía y 4 campos personales vacíos) | Crear `id_cliente` (HMAC-SHA256 con clave secreta) y eliminar las 52 columnas más `EVENTO` | Regla 2 del proyecto y criterio 8 del dataset; un hash sin clave permitiría recuperar las cédulas | `anonymize` (`src/proyecto/data/cleaning.py`) |
 | 3 | 41.855 clientes con 1 a 4 créditos; en 4.669 clientes el objetivo cambia entre créditos | Partir por cliente con `StratifiedGroupKFold` / `GroupShuffleSplit` | Evitar que el mismo cliente esté en entrenamiento y prueba | `split_by_client` |
-| 4 | `EVENTO`: 47,1 % / 46,9 % / 6,0 % vacío, sin relación con la mora y sin documentar | Omitir `EVENTO`; construir `EN_RIESGO` = `DIAS DE MORA` > 30 (19,0 % positivos) | No se puede explicar qué predice `EVENTO`; la mora > 30 días sí es una decisión de cartera | `build_target` |
+| 4 | `EVENTO`: 47,1 % / 46,9 % / 6,0 % vacío, sin relación con la mora y sin documentar | Omitir `EVENTO`; construir `mora_30` = `DIAS DE MORA` > 30 (19,0 % positivos) | No se puede explicar qué predice `EVENTO`; la mora > 30 días sí es una decisión de cartera | `build_target` |
 | 5 | Fechas `AAAAMMDD` con `0` como vacío; montos como texto con `.00` | Convertir a fecha y a número; `0` → vacío en las fechas | Poder calcular antigüedad y comparar montos | `parse_dates_and_amounts` |
 | 6 | 5 nombres de columna repetidos y columnas redundantes (`PLAZO UNIDAD TIEMPO PRODUCTO` = `NUMERO DE PAGOS PACTADOS`) | Renombrar con sufijo y quitar las redundantes | Evitar columnas ambiguas y duplicadas | `deduplicate_columns` |
 | 7 | `CAJA DE MORA A LA FECHA`, `CALIFICACION CARTERA`, `DESCRIPCION DEL ESTADO` y `NRO CUOTAS VENCIDAS` separan el objetivo al 100 % | Excluirlas junto con `DIAS DE MORA` y `ESTADO DEL PRESTAMO`; las sospechosas se miden con y sin ellas en la etapa 4 | Contienen la respuesta: el modelo "acertaría" sin aprender nada útil | `drop_leakage_columns` |
