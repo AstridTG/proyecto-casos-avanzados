@@ -1,20 +1,21 @@
 {
-  "modelo_final": "xgboost",
+  "modelo_final": "lightgbm",
   "parametros": {
     "n_estimators": 300,
     "learning_rate": 0.03,
-    "max_depth": 4,
-    "min_child_weight": 20,
+    "num_leaves": 15,
+    "min_child_samples": 100,
     "subsample": 0.8,
-    "colsample_bytree": 0.8
+    "colsample_bytree": 0.8,
+    "reg_lambda": 1.0
   },
   "origen_parametros": "partida",
   "variables": "referencia (12 variables conocidas al aprobar)",
   "calibrar": false,
   "metrica_principal": "recall de mora_30 con el umbral fijo elegido para precisión ≥ 20% (en validación)",
-  "regla_de_decision": "priorizar revisión si probabilidad ≥ 0.1927",
-  "umbral": 0.19270843267440796,
+  "regla_de_decision": "priorizar revisión si probabilidad ≥ 0.3010",
+  "umbral": 0.3009887899643487,
   "baseline": "regla del plazo corto",
-  "umbral_baseline": 0.1111111111111111,
-  "congeladas_en": "2026-10-30T21:37:45"
+  "umbral_baseline": 0.16666666666666666,
+  "congeladas_en": "2026-10-31T11:39:38"
 }

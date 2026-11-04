@@ -1,7 +1,7 @@
 ,créditos aprobados al mes,moras al mes (estimadas),moras detectadas al mes,créditos a revisar al mes
-random forest,2368,380,74,370
-xgboost,2368,380,72,358
-lightgbm,2368,380,71,354
-línea base: regla del plazo corto,2368,380,57,271
-regresión logística,2368,380,44,221
-línea base: tasa de mora (sin modelo),2368,380,0,0
+línea base: regla del plazo corto,2368,375,42,201
+xgboost,2368,375,36,179
+lightgbm,2368,375,22,110
+regresión logística,2368,375,22,110
+random forest,2368,375,13,66
+línea base: tasa de mora (sin modelo),2368,375,0,0

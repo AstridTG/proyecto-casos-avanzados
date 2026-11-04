@@ -54,6 +54,10 @@
   resultados de `reports/` (etapas 03 a 08) se generaron con la partición anterior y **no se regeneraron**, para no
   abrir de nuevo el conjunto de prueba. La nueva numeración rige desde la próxima vez que el grupo regenere el
   proyecto completo.
+- **Actualización (2026-11-03):** el proyecto completo se regeneró con la nueva numeración el 31-oct a las 11:39
+  (notebooks 03 a 09, `models/model.joblib` y `reports/`), y eso abrió la prueba por tercera vez. El grupo decidió
+  **conservar esa regeneración** porque es la única que se puede reproducir con el código actual. La partición
+  anterior ya no se puede obtener. Las consecuencias y las cifras vigentes están en `reports/07_validacion.md`, sección 0.
 
 ## Hallazgo central: la señal al aprobar es débil
 

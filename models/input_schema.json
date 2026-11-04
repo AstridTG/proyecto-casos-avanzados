@@ -71,11 +71,11 @@
     ],
     "loan_amount": [
       150031.0,
-      349852382.0
+      349949605.0
     ],
     "monthly_installment": [
       13409.0,
-      5653151.0
+      5688599.0
     ],
     "interest_rate_ea": [
       11.5718836,
@@ -100,9 +100,9 @@
   },
   "median": {
     "term_months": 36.0,
-    "loan_amount": 9378054.0,
-    "monthly_installment": 444043.0,
-    "interest_rate_ea": 20.816437,
+    "loan_amount": 9324984.0,
+    "monthly_installment": 443782.5,
+    "interest_rate_ea": 20.7926536,
     "due_day": 10.0,
     "has_guarantee": 0.0,
     "guarantee_value": 0.0,
@@ -166,8 +166,8 @@
     "city": "Ciudad del cliente"
   },
   "review_threshold": 0.55,
-  "threshold": 0.19270843267440796,
-  "base_rate": 0.16067504137612937,
+  "threshold": 0.3009887899643487,
+  "base_rate": 0.15825016272510306,
   "review_margin": 0.005,
   "mode": {
     "product": "120",
@@ -180,49 +180,49 @@
       "term_months": 36,
       "loan_amount": 9000000,
       "monthly_installment": 330000,
-      "interest_rate_ea": 24.5796534,
-      "due_day": 15,
+      "interest_rate_ea": 23.05924,
+      "due_day": 20,
       "has_guarantee": 0,
       "guarantee_value": 0,
       "has_cosigner": 0,
-      "product": "120",
+      "product": "118",
       "business_type": "1",
       "economic_destination": "12013",
-      "city": "MEDELLIN - ANTIOQUIA"
+      "city": "CALI - VALLE"
     },
     "Plazo corto (6 meses)": {
       "term_months": 6,
       "loan_amount": 3000000,
       "monthly_installment": 540000,
-      "interest_rate_ea": 24.5796534,
-      "due_day": 15,
+      "interest_rate_ea": 23.05924,
+      "due_day": 20,
       "has_guarantee": 0,
       "guarantee_value": 0,
       "has_cosigner": 0,
-      "product": "120",
+      "product": "118",
       "business_type": "1",
       "economic_destination": "12013",
-      "city": "MEDELLIN - ANTIOQUIA"
+      "city": "CALI - VALLE"
     }
   },
   "app_title": "LibranzaRadar · Priorización de seguimiento de créditos",
   "model_version": "libranzaradar_mora30 v1 (@champion)",
   "test_metrics": {
     "recall": [
-      0.14854299928926795,
-      0.12951150011229712,
-      0.1669023939037538
+      0.0,
+      0.0,
+      0.0
     ],
     "precision": [
-      0.19209558823529413,
-      0.16905135109789263,
-      0.21384792626728108
+      0.0,
+      0.0,
+      0.0
     ],
     "auc": [
-      0.5267247027860221,
-      0.5085825541962358,
-      0.5435211339557638
+      0.5439123316099728,
+      0.5273398633242194,
+      0.5597198996138475
     ],
-    "flag_rate": 0.11835091917763516
+    "flag_rate": 0.0005447809980387884
   }
 }

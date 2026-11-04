@@ -2,6 +2,83 @@
 
 > Resultado de `notebooks/07_validacion_interpretacion.ipynb`. Cifras en `reports/07_metricas_test.json`.
 
+## 0. Re-ejecución del 31-oct-2026: cifras vigentes
+
+> **Las secciones 1 a 6 de más abajo son de la ejecución del 30-oct y quedan como historia.** Las cifras que valen
+> son las de esta sección.
+
+### Por qué se volvió a ejecutar y por qué cambió el modelo
+
+- **Causa:** el commit `94d0369` (31-oct, 10:47) cambió el identificador del cliente. Antes era un hash del documento
+  con una sal pública; ahora es un número por orden de aparición (`c00001`…). El motivo fue la protección de datos
+  personales: con una sal pública, el hash se podía revertir probando documentos.
+- **Efecto:** `GroupShuffleSplit` reparte a los clientes según su identificador, así que la partición cambió (entrenamiento
+  36.857 → 36.872 filas; prueba 9.193 → 9.178). La lógica de la partición no cambió. Se volvieron a correr los
+  notebooks 03 a 09 y todas las cifras se movieron.
+- **Cambio de modelo (XGBoost → LightGBM):** lo hizo la **regla escrita antes de abrir la prueba** en el notebook 06,
+  que elige al finalista con mayor PR-AUC en los clientes reservados de validación. **No se usó la prueba.** Los dos
+  quedaron empatados (PR-AUC de partida: LightGBM 0,1710 frente a XGBoost 0,1705, con un ruido de ±0,006) y la
+  regla escoge a LightGBM. No se vuelve a XGBoost: hacerlo ahora, después de ver las dos pruebas, sería usar la
+  prueba para decidir.
+- **Detalle de la regla (para corregir, sin volver a abrir la prueba):** la celda 8 del notebook 06 compara el mayor
+  PR-AUC entre parámetros de partida y optimizados, pero después usa los de partida. Aquí no cambia el resultado,
+  porque con los de partida LightGBM también queda arriba.
+
+### Aperturas de la prueba (`reports/prueba_abierta.txt`)
+
+| Apertura | Partición | Modelo | Motivo |
+|---|---|---|---|
+| 30-oct 21:35 | Vieja (hash) | XGBoost | Primera ejecución; falló al guardar, después de calcular las métricas |
+| 30-oct 21:37 | Vieja (hash) | XGBoost | Misma ejecución, corregido solo el nombre de una variable (sección 3) |
+| 31-oct 11:39 | **Nueva (numeración)** | LightGBM | Re-ejecución completa del proyecto con la nueva numeración. La nota de `reports/01_eda.md` la dejaba para "la próxima vez que el grupo regenere el proyecto completo"; se hizo 52 minutos después (motivo por confirmar con el grupo) |
+
+**Declaración:** la prueba vigente es **otro grupo de clientes**. Parte de los clientes de la prueba vieja quedó en
+el entrenamiento nuevo. Con los resultados de la prueba vieja no se tomó ninguna decisión sobre el modelo, el umbral
+ni la métrica, pero el grupo ya los había visto. Por eso, la prueba vigente no es una medida tan limpia como una
+prueba abierta una sola vez.
+
+### Decisiones congeladas (31-oct 11:39, `reports/07_decisiones_congeladas.json`)
+
+LightGBM con parámetros de partida (300 árboles, tasa 0,03, 15 hojas, `min_child_samples` 100), 12 variables
+conocidas al aprobar, **sin calibrar** (en clientes reservados: Brier 0,1332 sin calibrar y 0,1328 con isotónica;
+probabilidad media 15,9 % frente a 15,8 % real) y **umbral 0,3010**.
+
+### ⚠️ El umbral ya no servía antes de abrir la prueba
+
+En las predicciones fuera de pliegue del entrenamiento, el único umbral que llegaba a una precisión ≥ 20 % era
+0,3010, y ese umbral marca solo el **0,1 %** de los créditos (recall 0,001). Es decir, **con la nueva partición
+LightGBM no logra la precisión exigida en una cantidad útil de créditos.** El notebook lo congeló igual, porque la
+regla no exigía un mínimo de créditos marcados. La regla del plazo corto, con el mismo criterio, marca el 8,9 % con
+precisión 20,7 % y recall 11,7 %. Esto se sabía en validación y debió frenar el paso a la prueba.
+
+### Resultados en la prueba vigente
+
+9.178 créditos de 6.932 clientes; mora real 16,3 %.
+
+| Métrica | LightGBM | Regla del plazo corto (plazo ≤ 6 meses) | Modelo − regla [IC 95 %] |
+|---|---|---|---|
+| **Recall de la mora** (métrica principal) | **0,000** [0,000 ; 0,000] | 0,134 [0,116 ; 0,151] | −0,134 [−0,151 ; −0,116] |
+| Precisión (exigida ≥ 0,20) | 0,000 | 0,242 [0,212 ; 0,271] | — |
+| PR-AUC | 0,193 [0,180 ; 0,208] | 0,186 [0,174 ; 0,198] | +0,007 [−0,001 ; +0,016] |
+| AUC | 0,544 [0,527 ; 0,560] | 0,537 [0,520 ; 0,553] | +0,007 [−0,008 ; +0,024] |
+| % de créditos marcados | 0,1 % | 9,0 % | — |
+
+- **Con la regla de decisión congelada, el modelo no detecta ninguna mora** y es claramente peor que la regla del
+  plazo corto (el intervalo de la diferencia queda entero bajo cero).
+- **Ordenando el riesgo (PR-AUC y AUC), el modelo y la regla empatan:** los intervalos de la diferencia incluyen el cero.
+- **Por segmento** (`reports/07_errores_por_segmento.csv`), el modelo marca entre el 0,0 % y el 0,3 % en todos los
+  plazos, productos y edades: no hay un segmento que se salve.
+- **Variables que más pesan** (`reports/07_importancia_shap.csv`): plazo (0,094), cuota mensual (0,055), monto
+  (0,049), tasa EA (0,045) y valor de la garantía (0,029). Es el mismo orden de la ejecución anterior.
+
+### Conclusión vigente
+
+Con la información disponible al aprobar, **el modelo no supera a la regla del plazo corto.** Con el umbral
+congelado no sirve para priorizar, y como puntaje para ordenar rinde igual que la regla. **Recomendación al negocio:
+priorizar el seguimiento con la regla del plazo corto** y capturar mejores datos al aprobar (capacidad de pago,
+endeudamiento externo, antigüedad laboral, estabilidad de la empresa pagadora). Lo que el modelo NO debe hacer se
+mantiene como en la sección 6.
+
 ## 1. Decisiones congeladas (escritas ANTES de abrir la prueba)
 
 | Decisión | Valor | Cómo se decidió (con qué datos) |
