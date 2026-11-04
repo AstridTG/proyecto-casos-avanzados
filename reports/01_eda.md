@@ -55,7 +55,7 @@
   abrir de nuevo el conjunto de prueba. La nueva numeración rige desde la próxima vez que el grupo regenere el
   proyecto completo.
 - **Actualización (2026-11-03):** el proyecto completo se regeneró con la nueva numeración el 31-oct a las 11:39
-  (notebooks 03 a 09, `models/model.joblib` y `reports/`), y eso abrió la prueba por tercera vez. El grupo decidió
+  (notebooks 03 a 09, `models/model.joblib` y `reports/`) para que la partición fuera reproducible en todos los equipos del grupo: mismo CSV original (verificado con su huella SHA-256), misma versión del código, semilla `RANDOM_STATE = 42` y librerías fijadas en `requirements.txt`. La partición anterior (36.857 / 9.193) venía de una versión distinta del código (identificador del cliente con hash); la nueva es 36.872 / 9.178. Eso abrió la prueba por tercera vez. El grupo decidió
   **conservar esa regeneración** porque es la única que se puede reproducir con el código actual. La partición
   anterior ya no se puede obtener. Las consecuencias y las cifras vigentes están en `reports/07_validacion.md`, sección 0.
 

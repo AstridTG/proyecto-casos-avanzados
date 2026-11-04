@@ -9,7 +9,7 @@
 |---|---|
 | Dónde corre | **En local**, en el computador de la demo: `streamlit run app/streamlit_app.py` → <http://localhost:8501> |
 | Por qué en local | Decisión del grupo del 3-nov-2026, **aprobada por el profesor**: la app y el seguimiento de experimentos (MLflow) quedan en local. No se publica en Streamlit Community Cloud ni se usa Databricks |
-| Repo, rama y archivo principal | _(usuario/repo)_ · `main` · `app/streamlit_app.py` |
+| Repo, rama y archivo principal | <https://github.com/AstridTG/proyecto-casos-avanzados> · `main` · `app/streamlit_app.py` |
 | Versión de Python | ☒ 3.12  ☐ otra |
 | ¿Se comprobó en el computador de la demo? | ☐ sí  ☐ no _(completar)_ |
 

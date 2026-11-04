@@ -2,7 +2,7 @@
 
 > **Regla del informe:** cada decisión va con su motivo. Las secciones detalladas están en `reports/00_caso.md` a `reports/09_despliegue.md`.
 
-**Grupo:** _(completar integrantes y roles)_ · **Repositorio:** _(completar)_ · **App:** en local (`streamlit run app/streamlit_app.py`)
+**Grupo:** Juan Rafael Taborda, Yenifer Tatiana Calle Zapata, Daniela Acevedo Alvares, Liliana Maria Garcia Builes, Astrid Liliana Torres Gonzalez _(roles: completar)_ · **Repositorio:** <https://github.com/AstridTG/proyecto-casos-avanzados> · **App:** en local (`streamlit run app/streamlit_app.py`)
 
 ## Resumen ejecutivo
 
@@ -82,7 +82,7 @@ Seis candidatos con los mismos pliegues por cliente: tasa base sin modelo, **reg
 
 - **Decisiones congeladas antes de abrir la prueba** (31-oct 11:39): LightGBM con parámetros de partida, 12 variables, **sin calibrar** (Brier 0,1332 sin calibrar y 0,1328 con isotónica en clientes reservados) y **umbral 0,3010** (el único con precisión ≥ 20 % en las predicciones fuera de pliegue).
 - **⚠️ El umbral ya no servía en validación:** en las predicciones fuera de pliegue marcaba solo el 0,1 % de los créditos (recall 0,001). La regla de congelamiento no exigía un mínimo de créditos marcados, así que el umbral pasó a la prueba igual. Esto debió frenar el paso.
-- **Declaración:** la prueba se abrió tres veces (`reports/prueba_abierta.txt`). Las dos del 30-oct (21:35 y 21:37, XGBoost, partición anterior) fueron la misma ejecución, repetida por un error al guardar. La del 31-oct (11:39, LightGBM) se hizo al regenerar el proyecto después de cambiar el identificador del cliente. La prueba vigente es otro grupo de clientes y parte de los clientes de la prueba anterior quedó en entrenamiento. Detalle en `reports/07_validacion.md`, sección 0.
+- **Declaración:** la prueba se abrió tres veces (`reports/prueba_abierta.txt`). Las dos del 30-oct (21:35 y 21:37, XGBoost, partición anterior) fueron la misma ejecución, repetida por un error al guardar. La del 31-oct (11:39, LightGBM) se hizo al regenerar los notebooks 03 a 09 para que la partición fuera reproducible en todos los equipos del grupo: mismo CSV original (verificado con su huella SHA-256), misma versión del código, semilla `RANDOM_STATE = 42` y librerías fijadas en `requirements.txt`. La partición anterior (36.857 / 9.193) venía de una versión distinta del código (identificador del cliente con hash); la nueva es 36.872 / 9.178. La prueba vigente es otro grupo de clientes y parte de los clientes de la prueba anterior quedó en entrenamiento. Detalle en `reports/07_validacion.md`, sección 0.
 - **Resultado en la prueba vigente** (9.178 créditos, 6.932 clientes nuevos, mora 16,3 %):
 
 | Métrica | Modelo | Regla del plazo corto | Modelo − regla (IC 95 %) |

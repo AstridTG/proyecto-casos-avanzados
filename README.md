@@ -80,9 +80,12 @@ anidada) y `-08-registro`. Modelo registrado: `libranzaradar_mora30`, alias `cha
 
 | Integrante | Rol |
 |---|---|
-| _(completar)_ | Datos |
-| _(completar)_ | Modelado |
-| _(completar)_ | App |
-| _(completar)_ | Negocio y reporte |
+| Juan Rafael Taborda | _(completar)_ |
+| Yenifer Tatiana Calle Zapata | _(completar)_ |
+| Daniela Acevedo Alvares | _(completar)_ |
+| Liliana Maria Garcia Builes | _(completar)_ |
+| Astrid Liliana Torres Gonzalez | _(completar)_ |
+
+Repositorio: <https://github.com/AstridTG/proyecto-casos-avanzados>
 
 Especificación del proyecto: [`especificacion-proyecto.md`](especificacion-proyecto.md) · Informe técnico: [`reports/informe_tecnico.md`](reports/informe_tecnico.md)

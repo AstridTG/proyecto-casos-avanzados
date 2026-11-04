@@ -14,7 +14,7 @@
 | Nombre del modelo registrado | `libranzaradar_mora30` |
 | Versión | 1 |
 | Alias | `champion` |
-| Quién lo registró y cuándo | _(completar: integrante)_ · 31-oct-2026 11:40 (run `309f85c4e934454f838ea98d449953f4`) |
+| Quién lo registró y cuándo | Yenifer Tatiana Calle Zapata · 31-oct-2026 11:40 (run `309f85c4e934454f838ea98d449953f4`) |
 
 ## 2. Qué se registró junto al modelo
 

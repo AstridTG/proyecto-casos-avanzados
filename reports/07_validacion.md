@@ -30,7 +30,7 @@
 |---|---|---|---|
 | 30-oct 21:35 | Vieja (hash) | XGBoost | Primera ejecución; falló al guardar, después de calcular las métricas |
 | 30-oct 21:37 | Vieja (hash) | XGBoost | Misma ejecución, corregido solo el nombre de una variable (sección 3) |
-| 31-oct 11:39 | **Nueva (numeración)** | LightGBM | Re-ejecución completa del proyecto con la nueva numeración. La nota de `reports/01_eda.md` la dejaba para "la próxima vez que el grupo regenere el proyecto completo"; se hizo 52 minutos después (motivo por confirmar con el grupo) |
+| 31-oct 11:39 | **Nueva (numeración)** | LightGBM | Re-ejecución de los notebooks 03 a 09 para que la partición fuera reproducible en todos los equipos del grupo: mismo CSV original (verificado con su huella SHA-256), misma versión del código, semilla `RANDOM_STATE = 42` y librerías fijadas en `requirements.txt`. La partición anterior (36.857 / 9.193) venía de una versión distinta del código (identificador del cliente con hash); la nueva es 36.872 / 9.178 |
 
 **Declaración:** la prueba vigente es **otro grupo de clientes**. Parte de los clientes de la prueba vieja quedó en
 el entrenamiento nuevo. Con los resultados de la prueba vieja no se tomó ninguna decisión sobre el modelo, el umbral

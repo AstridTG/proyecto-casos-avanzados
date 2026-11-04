@@ -6,11 +6,13 @@
 
 | Integrante | Rol (datos / modelado / app / negocio) |
 |---|---|
-| _(completar)_ | |
-| _(completar)_ | |
-| _(completar)_ | |
+| Juan Rafael Taborda | _(completar)_ |
+| Yenifer Tatiana Calle Zapata | _(completar)_ |
+| Daniela Acevedo Alvares | _(completar)_ |
+| Liliana Maria Garcia Builes | _(completar)_ |
+| Astrid Liliana Torres Gonzalez | _(completar)_ |
 
-Nombre de la "startup": **LibranzaRadar**   Repositorio (público): _(completar enlace de GitHub)_
+Nombre de la "startup": **LibranzaRadar**   Repositorio (público): <https://github.com/AstridTG/proyecto-casos-avanzados>
 
 ## 2. Caso de negocio
 
