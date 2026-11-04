@@ -53,7 +53,7 @@ Resultados del 3-nov-2026 con el modelo LightGBM vigente. La columna "Resultado 
 ## 4. Problemas encontrados y plan B
 
 - **Errores al correrla:** _(completar si aparecen)_. Los más comunes: versión de Python distinta de 3.12 (falla al instalar o al cargar el modelo), `PYTHONUTF8` sin definir en Windows y el error de LightGBM en Windows (solución en el README).
-- **Plan B:** captura de pantalla con fecha → `presentacion/captura_app.png` _(completar)_, y tener la app ya abierta en el navegador antes de empezar la presentación.
+- **Plan B:** captura de pantalla del 3-nov-2026 en `presentacion/captura_app.png` (ejemplo "Crédito típico (36 meses)": seguimiento normal, 15,7 %, con el aviso de la regla del plazo corto visible), y tener la app ya abierta en el navegador antes de empezar la presentación.
 
 ## 5. Ensayo cronometrado (clase 5)
 
