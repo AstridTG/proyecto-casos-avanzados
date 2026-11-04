@@ -65,7 +65,7 @@ Seis candidatos con los mismos pliegues por cliente: tasa base sin modelo, **reg
 
 - **La regla del plazo corto queda primera** en negocio, AUC y PR-AUC.
 - **Finalistas:** XGBoost y LightGBM. **Motivo:** los dos modelos con mayor PR-AUC, con probabilidades sin inflar y rápidos. La regresión logística empata en PR-AUC, pero sus probabilidades están infladas por los pesos balanceados.
-- **Comparación pareada:** la regla frente a XGBoost, +0,0026 de PR-AUC (0,48 veces el ruido). **Ya en validación cruzada ningún modelo superaba a la regla.** (Las otras filas de la comparación pareada quedaron mal calculadas por un error del notebook 05; ver `reports/05_torneo.md`.)
+- **Comparación pareada** (mejor modelo, XGBoost, frente a la regla en los mismos pliegues): la regla gana en PR-AUC (0,48 veces el ruido) y en negocio (0,77), dentro del ruido, y **en AUC gana en los 5 pliegues por 3,09 veces el ruido**. **Ya en validación cruzada ningún modelo superaba a la regla.** (Corregida el 3-nov-2026; ver `reports/05_torneo.md`.)
 
 ## 5. Optimización y seguimiento
 

@@ -20,10 +20,10 @@
 | Modelo | Recall de mora con precisión ≥ 20 % (± ruido) | Precisión lograda | % de créditos marcados | Segundos de ajuste |
 |---|---|---|---|---|
 | **Línea base: regla del plazo corto** | **0,113 ± 0,068** | 0,168 | 8,5 % | 0,0 |
-| XGBoost | 0,095 ± 0,058 | 0,200 | 7,5 % | 0,8 |
+| XGBoost | 0,095 ± 0,058 | 0,200 | 7,5 % | 1,2 |
 | Regresión logística | 0,059 ± 0,057 | 0,160 | 4,7 % | 0,2 |
-| LightGBM | 0,059 ± 0,078 | 0,200 | 4,7 % | 0,4 |
-| Random forest | 0,035 ± 0,038 | 0,160 | 2,8 % | 3,4 |
+| LightGBM | 0,059 ± 0,078 | 0,200 | 4,7 % | 0,5 |
+| Random forest | 0,035 ± 0,038 | 0,160 | 2,8 % | 4,4 |
 | Línea base: tasa de mora (sin modelo) | 0,000 ± 0,000 | — | 0 % | 0,0 |
 
 > "Precisión lograda" es la media entre pliegues. Una media menor que 0,20 indica que en algunos pliegues ningún
@@ -64,16 +64,23 @@
 
 ## Comparación pareada
 
-> `reports/05_torneo_pareada.csv`. **Error del notebook:** la celda 9 toma como "mejor" al primero de la tabla
-> técnica. Con la nueva partición ese primero es la propia regla del plazo corto, así que tres de las cuatro filas
-> comparan la regla contra sí misma (diferencia 0) y no sirven. Solo vale la primera fila. Para corregirlo, la celda
-> debería tomar el mejor *modelo* (sin líneas base) y compararlo contra la regla. Esa corrección no se ha ejecutado.
+> `reports/05_torneo_pareada.csv`. El mejor **modelo** por PR-AUC (sin contar las líneas base) frente al segundo
+> modelo y frente a la regla del plazo corto, con los mismos 5 pliegues. **Corrección del 3-nov-2026:** antes, la
+> celda 9 tomaba al primero de la tabla incluidas las líneas base. Con la nueva partición ese primero era la propia
+> regla, y tres filas la comparaban contra sí misma. Se corrigió la celda y se volvió a correr el notebook 05, que solo
+> usa el entrenamiento: las demás tablas y las predicciones fuera de pliegue salieron idénticas (solo cambian los
+> segundos de ajuste, que dependen del computador).
 
 | A | B | Métrica | Diferencia media (A − B) | Pliegues que gana A | Diferencia / ruido |
 |---|---|---|---|---|---|
-| Regla del plazo corto | XGBoost | PR-AUC | +0,0026 | 4 de 5 | 0,48 |
+| XGBoost | LightGBM | PR-AUC | +0,0008 | 3 de 5 | 0,38 |
+| XGBoost | Regla del plazo corto | PR-AUC | −0,0026 | 1 de 5 | −0,48 |
+| XGBoost | Regla del plazo corto | Recall con precisión ≥ 20 % | −0,018 | 1 de 5 | −0,77 |
+| XGBoost | Regla del plazo corto | AUC | −0,010 | 0 de 5 | **−3,09** |
 
-La diferencia no llega a 1 vez su ruido: **la regla y XGBoost están empatados en PR-AUC.** Ningún modelo supera a la regla del plazo corto.
+- **XGBoost frente a LightGBM:** empate (0,38 veces el ruido).
+- **XGBoost frente a la regla:** la regla gana en las tres métricas. En PR-AUC y en la métrica de negocio la diferencia está dentro del ruido. **En AUC la regla gana en los 5 pliegues y por 3 veces el ruido:** ordena el riesgo mejor que el mejor modelo, de forma consistente.
+- **Conclusión:** en validación cruzada, **ningún modelo supera a la regla del plazo corto**, y en AUC la regla es claramente mejor.
 
 ## ¿Cuánto vale la diferencia?
 
