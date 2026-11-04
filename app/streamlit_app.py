@@ -30,8 +30,10 @@ RESPONSIBLE_USE = """
 - **Qué apoya:** decidir a qué créditos aprobados dar **revisión y seguimiento prioritario** con la empresa pagadora.
 - **Qué NO decide:** no aprueba ni niega créditos, no fija tasas ni montos y no se usa para cobrar distinto a nadie.
   **La decisión final es del analista de crédito.**
-- **Qué tan bueno es:** con la información disponible al aprobar, el modelo detecta poco más que una regla simple
-  basada en el plazo (ver la ficha del modelo). Úselo para ordenar la revisión, no como un veredicto.
+- **Qué tan bueno es:** con la información disponible al aprobar, el modelo **no supera** a la regla simple del plazo
+  corto. Con su umbral casi nunca sugiere priorizar (0,1 % de los créditos en la prueba). Como puntaje para ordenar
+  rinde igual que el plazo. **Para priorizar se recomienda la regla del plazo corto (plazo ≤ 6 meses)**; ver la ficha
+  del modelo (`models/ficha_modelo.md`).
 - **Datos:** fue entrenado con una base **sintética** de cartera de libranza. Antes de usarlo con clientes reales
   hay que volver a entrenarlo y validarlo con datos reales.
 - No usa sexo, estado civil ni edad. No ingrese nombres, documentos ni datos de contacto.
@@ -142,8 +144,9 @@ def single_credit(model, schema: dict, examples: dict, chosen: str) -> None:
         comparison = "más" if proba > base_rate else "menos"
         st.markdown(f"Es **{proba / base_rate:.2f} veces** la tasa promedio de mora ({base_rate:.1%}): "
                     f"riesgo **{comparison}** que el promedio.")
-        st.caption(f"Se prioriza cuando la probabilidad es ≥ {threshold:.1%}. Ese umbral se eligió para que, de cada "
-                   "5 créditos priorizados, al menos 1 caiga de verdad en mora.")
+        st.caption(f"El modelo prioriza cuando la probabilidad es ≥ {threshold:.1%}. Ese umbral buscaba que, de cada "
+                   "5 créditos priorizados, al menos 1 cayera en mora, pero casi nunca se alcanza: en la prueba marcó "
+                   "el 0,1 % de los créditos y no detectó ninguna mora. Un resultado verde no significa riesgo bajo.")
         if bool(first["needs_review"]):
             st.warning("La probabilidad está muy cerca del umbral: la sugerencia podría cambiar con poco. Use su criterio.")
         for message in result.attrs.get("warnings", []):
@@ -229,6 +232,9 @@ def main() -> None:
     st.title(schema.get("app_title", "LibranzaRadar"))
     st.caption("Herramienta de apoyo para el analista de crédito: sugiere a qué créditos de libranza aprobados dar "
                "seguimiento prioritario con la empresa pagadora. **No aprueba ni niega créditos.**")
+    st.warning("**Aviso:** con la información disponible al aprobar, este modelo no supera a la regla simple del plazo "
+               "corto y, con su umbral, casi nunca sugiere priorizar. **Para priorizar el seguimiento se recomienda "
+               "la regla del plazo corto (plazo ≤ 6 meses).** Use la probabilidad solo como referencia.")
 
     examples = schema.get("examples", {})
     with st.sidebar:
