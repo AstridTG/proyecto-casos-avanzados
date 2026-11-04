@@ -4,7 +4,7 @@
 > probabilidad de que caigan en más de 30 días de mora. Para el analista de crédito de una caja de compensación,
 > que conserva la decisión final.
 
-**App desplegada:** _(enlace público de Streamlit Community Cloud: se completa al desplegar, ver `reports/09_despliegue.md`)_
+**App:** corre **en local** (`streamlit run app/streamlit_app.py`); no se publica en la nube (aprobado por el profesor el 3-nov-2026). Ver `reports/09_despliegue.md`.
 
 ## Resultado en una línea
 
@@ -35,7 +35,7 @@ Requiere Python 3.12 y [uv](https://docs.astral.sh/uv/) (o `python -m venv` + `p
 ```bash
 uv venv --python 3.12 .venv
 uv pip install --python .venv/Scripts/python.exe -r requirements.txt   # Mac/Linux: .venv/bin/python
-cp .env.example .env            # opcional: credenciales de Databricks; sin ellas se usa MLflow local
+# no hace falta .env: el seguimiento usa MLflow local
 # copia Base_sintetica_creditos.csv en data/raw/
 pytest -q                        # 57 pruebas (las del modelo real usan models/)
 streamlit run app/streamlit_app.py
@@ -66,8 +66,8 @@ Si al final pide reiniciar, puedes elegir *Close*. Comprueba con
 
 ### Seguimiento de experimentos (MLflow)
 
-`src/proyecto/tracking/mlflow_utils.py` usa **Databricks** si `.env` tiene `PROFILE` o `DATABRICKS_HOST` + `DATABRICKS_TOKEN`,
-y **MLflow local** (`mlflow_local.db`) si no. Para ver los experimentos locales:
+El proyecto usa **MLflow local** (`mlflow_local.db`), aprobado por el profesor el 3-nov-2026. `src/proyecto/tracking/mlflow_utils.py` conserva la
+opción de Databricks si `.env` tiene `PROFILE` o `DATABRICKS_HOST` + `DATABRICKS_TOKEN`, pero no se usa. Para ver los experimentos locales:
 
 ```bash
 mlflow ui --backend-store-uri sqlite:///mlflow_local.db

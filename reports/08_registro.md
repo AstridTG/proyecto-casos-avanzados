@@ -9,7 +9,7 @@
 
 | Dato | Valor |
 |---|---|
-| Plataforma | ☐ Databricks  ☒ MLflow local (respaldo) → motivo: la corrida de referencia se hizo sin credenciales de Databricks del grupo. **Pendiente:** el grupo vuelve a ejecutar 08 (y 05–06) con `.env` configurado; el mismo código registra en Unity Catalog como `workspace.default.libranzaradar_mora30`. |
+| Plataforma | ☐ Databricks  ☒ **MLflow local** (`mlflow_local.db`) → motivo: decisión del grupo, aprobado por el profesor el 3-nov-2026. El código conserva la opción de Databricks (`src/proyecto/tracking/mlflow_utils.py`), pero no se usa. |
 | Experimento | `libranzaradar-08-registro` |
 | Nombre del modelo registrado | `libranzaradar_mora30` |
 | Versión | 1 |
@@ -37,4 +37,4 @@
 
 ## 5. Reproducibilidad
 
-- ¿Alguien de otro grupo podría recuperar el modelo con lo que dejamos escrito? ☒ sí  ☐ no — el modelo exportado está en `models/model.joblib` con su esquema (`models/input_schema.json`), y todo el flujo se regenera desde la base cruda con los notebooks 03–09 (instrucciones en el README). El registro local (`mlflow_local.db`) no se sube al repo; en Databricks queda accesible para el instructor.
+- ¿Alguien de otro grupo podría recuperar el modelo con lo que dejamos escrito? ☒ sí  ☐ no — el modelo exportado está en `models/model.joblib` con su esquema (`models/input_schema.json`), y todo el flujo se regenera desde la base cruda con los notebooks 03–09 (instrucciones en el README). El registro local (`mlflow_local.db`) no se sube al repo: quien quiera ver el registro debe regenerarlo con los notebooks, o el grupo lo muestra en su computador con `mlflow ui`.

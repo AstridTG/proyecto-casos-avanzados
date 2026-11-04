@@ -44,14 +44,14 @@ footer: "Casos Avanzados · Maestría en Ingeniería Analítica"
 
 # 4 · Demo de la app
 
-**Enlace:** _(completar con el enlace público)_
+**En local:** `streamlit run app/streamlit_app.py` (la app no se publica en la nube).
 
 1. **Aviso al abrir:** la app dice que el modelo no supera a la regla y recomienda priorizar por plazo ≤ 6 meses.
 2. **Caso normal:** crédito a 36 meses → 🟢 seguimiento normal (16 %, igual al promedio).
 3. **Plazo corto:** crédito a 6 meses → 22 %, 1,4 veces el promedio, pero 🟢 seguimiento normal: no llega al umbral del modelo (30 %). La regla del plazo corto sí lo priorizaría. La app muestra qué dato pesó: el plazo.
 4. **Dato inválido:** plazo = −5 → "Revisa los datos: Plazo (meses) debe estar entre 1 y 360".
 
-> Plan B: captura con fecha y la app en local (`streamlit run app/streamlit_app.py`).
+> Plan B: captura con fecha y la app abierta antes de empezar.
 
 ---
 

@@ -47,7 +47,7 @@ Nombre de la "startup": **LibranzaRadar**   Repositorio (público): _(completar 
 |---|---|---|
 | H1 | Ficha, EDA y preprocesamiento reproducible | Cierre de la clase 2 (vie 30 oct) |
 | H2 | Torneo, optimización con tracking, modelo registrado, repo modular, app local | Cierre de la clase 4 (jue 5 nov) |
-| H3 | App desplegada y presentación (≤ 5 diapositivas) | Clase 5 (vie 6 nov) |
+| H3 | App funcionando en local y presentación (≤ 5 diapositivas) | Clase 5 (vie 6 nov) |
 | H4 | Informe técnico final | Domingo 15 nov |
 
 ## 7. Decisiones tomadas
@@ -60,3 +60,7 @@ Nombre de la "startup": **LibranzaRadar**   Repositorio (público): _(completar 
 | 30-oct-2026 | Partición y validación por cliente | 12.627 clientes con varios créditos |
 | 30-oct-2026 | No usar sexo, estado civil ni edad | Atributos sensibles sin señal |
 | 30-oct-2026 | Variables finales: 12 condiciones del crédito | Ninguna idea adicional superó el ruido (etapa 4) |
+| 31-oct-2026 | Número de cliente (`c00001`...) en vez de hash con sal pública | Con la sal en el repo, el documento se podía recuperar probando números |
+| 3-nov-2026 | Conservar la regeneración con la nueva numeración (LightGBM) | Es la única reproducible con el código actual; la tercera apertura de la prueba queda declarada (`reports/07_validacion.md`) |
+| 3-nov-2026 | Seguimiento, registro y app **en local** (MLflow local, sin Databricks ni nube) | Aprobado por el profesor; la app no necesita credenciales ni conexión |
+| 3-nov-2026 | Recomendar la regla del plazo corto (plazo ≤ 6 meses) | El modelo no la supera en validación ni en prueba |

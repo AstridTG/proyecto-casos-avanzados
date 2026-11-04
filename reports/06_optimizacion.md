@@ -26,7 +26,7 @@
 
 ## Seguimiento (tracking)
 
-- **Dónde quedó registrado:** MLflow **local** (`mlflow_local.db`), experimento `libranzaradar-06-optimizacion`. El código usa Databricks automáticamente si `.env` tiene credenciales (`src/proyecto/tracking/mlflow_utils.py`); esta corrida se hizo sin credenciales del grupo. **Pendiente del grupo:** volver a correr los notebooks 05, 06 y 08 con `.env` configurado para que queden en Databricks.
+- **Dónde quedó registrado:** MLflow **local** (`mlflow_local.db`), experimento `libranzaradar-06-optimizacion`. El código usa Databricks automáticamente si `.env` tiene credenciales (`src/proyecto/tracking/mlflow_utils.py`); el grupo decidió dejar el seguimiento en **MLflow local** (aprobado por el profesor el 3-nov-2026), así que no se usa Databricks.
 - **¿Está cada ensayo como una ejecución con parámetros, métrica y etiquetas?** ☒ sí ☐ no — 50 ejecuciones anidadas bajo `optuna-lightgbm` y `optuna-xgboost` (52 en total), cada una con todas las métricas de negocio y técnicas (media y desviación entre pliegues) y las etiquetas `etapa`, `modelo` y `metrica_optimizada`.
 - **Mejor ejecución:** empate. LightGBM (ensayo 22) y XGBoost (ensayo 16) llegan a PR-AUC 0,1787 en la búsqueda (optimista).
 

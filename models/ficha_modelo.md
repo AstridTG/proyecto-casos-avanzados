@@ -10,7 +10,7 @@ Estima la probabilidad de que un crédito de libranza recién aprobado caiga en 
 
 - **Modelo:** LightGBM (300 árboles, tasa 0,03, 15 hojas, `min_child_samples` 100, `subsample` 0,8, `colsample_bytree` 0,8, `reg_lambda` 1,0) dentro de un `Pipeline` de scikit-learn con imputación y codificación. Parámetros de partida: la optimización con Optuna no mejoró de forma distinguible en clientes reservados. Sin calibración (ya estaba calibrado).
 - **Por qué LightGBM:** la regla de elección, escrita antes de abrir la prueba, toma al finalista con mayor PR-AUC en clientes reservados. LightGBM y XGBoost **empataron** (0,1710 frente a 0,1705, con un ruido de ±0,006). Ver `reports/07_validacion.md`, sección 0.
-- **Registro:** `libranzaradar_mora30` versión 1, alias `champion` (MLflow local; pendiente de registrar en Databricks).
+- **Registro:** `libranzaradar_mora30` versión 1, alias `champion` (MLflow local, aprobado por el profesor el 3-nov-2026; no se usa Databricks).
 - **Regla de decisión congelada:** priorizar si la probabilidad es **≥ 0,3010**. Era el único umbral con precisión ≥ 20 % en las predicciones fuera de pliegue del entrenamiento, pero **ya ahí marcaba solo el 0,1 % de los créditos** (recall 0,001). En la práctica, no prioriza.
 
 ## Datos de entrenamiento

@@ -2,7 +2,7 @@
 
 > **Regla del informe:** cada decisión va con su motivo. Las secciones detalladas están en `reports/00_caso.md` a `reports/09_despliegue.md`.
 
-**Grupo:** _(completar integrantes y roles)_ · **Repositorio:** _(completar)_ · **App:** _(completar enlace público)_
+**Grupo:** _(completar integrantes y roles)_ · **Repositorio:** _(completar)_ · **App:** en local (`streamlit run app/streamlit_app.py`)
 
 ## Resumen ejecutivo
 
@@ -72,7 +72,7 @@ Seis candidatos con los mismos pliegues por cliente: tasa base sin modelo, **reg
 > Fuente: `reports/06_optimizacion.md`.
 
 - **Búsqueda:** Optuna, 30 ensayos de LightGBM y 20 de XGBoost, objetivo PR-AUC, en el 80 % de los clientes de entrenamiento. El espacio favorece árboles pequeños y regularizados, por la señal débil.
-- **Seguimiento:** cada ensayo es una ejecución anidada en MLflow con todas las métricas (52 ejecuciones en `libranzaradar-06-optimizacion`), además de los experimentos de variables (6), torneo (6) y registro (1). Corrida de referencia en **MLflow local**; el código cambia a Databricks con `.env`.
+- **Seguimiento:** cada ensayo es una ejecución anidada en MLflow con todas las métricas (52 ejecuciones en `libranzaradar-06-optimizacion`), además de los experimentos de variables (6), torneo (6) y registro (1). Todo queda en **MLflow local** (aprobado por el profesor el 3-nov-2026); no se usa Databricks.
 - **Comprobación honesta** en el 20 % de clientes reservados: XGBoost +0,0030 de PR-AUC (IC [−0,0028 ; +0,0089]) y LightGBM +0,0027 (IC [−0,0035 ; +0,0098]). **Regla escrita antes:** adoptar los optimizados solo si el intervalo queda entero sobre 0. **No se cumple → parámetros de partida.**
 - **Elección del modelo:** la regla escrita antes de la prueba toma al finalista con mayor PR-AUC en los reservados. Con los parámetros de partida, que son los que se usan, LightGBM gana por 0,0005 (0,1710 frente a 0,1705), unas 12 veces menos que el ruido: **es un empate** que la regla desempata a favor de LightGBM.
 
@@ -109,7 +109,7 @@ Seis candidatos con los mismos pliegues por cliente: tasa base sin modelo, **reg
 - **App:** `app/streamlit_app.py`. Carga `models/model.joblib` desde el repo y **no consulta Databricks**, así que no necesita credenciales y no depende de cuotas. Valida rangos posibles (por ejemplo, rechaza un plazo de −5 con un mensaje claro) y acepta "No sé" (el pipeline imputa). Muestra la probabilidad, cuántas veces está sobre el promedio, la sugerencia (priorizar o seguimiento normal), qué datos pesaron y un aviso de uso responsable.
 - **Aviso visible:** la app dice al abrir que el modelo no supera a la regla del plazo corto y recomienda usar esa regla. La lógica de decisión no se cambió para el H2.
 - **Pruebas en local** (3-nov, modelo vigente): caso normal → seguimiento normal (15,7 %); plazo 6 meses → **seguimiento normal** (22,2 %, bajo el umbral de 30,1 %); plazo −5 → rechazo; campos en "No sé" → responde. Carga masiva de la base: 47 de 56.381 créditos a priorizar (0,08 %).
-- **Enlace público:** _(completar tras desplegar en Streamlit Community Cloud, Python 3.12)_.
+- **Dónde corre:** **en local**, sin publicar en la nube (aprobado por el profesor el 3-nov-2026). Pasos en `reports/09_despliegue.md`.
 
 ## 9. Riesgos, límites y siguientes pasos
 
@@ -121,7 +121,7 @@ Seis candidatos con los mismos pliegues por cliente: tasa base sin modelo, **reg
 ## Anexo: cómo reproducir el proyecto
 
 1. `uv venv --python 3.12 .venv` y `uv pip install --python .venv/bin/python -r requirements.txt` (en Windows: `.venv/Scripts/python.exe` y `$env:PYTHONUTF8=1`).
-2. Copiar `Base_sintetica_creditos.csv` a `data/raw/`. Opcional: `cp .env.example .env` con credenciales de Databricks.
+2. Copiar `Base_sintetica_creditos.csv` a `data/raw/`. No hace falta `.env`: el seguimiento usa MLflow local.
 3. Ejecutar los notebooks `01` a `09` en orden (≈ 25 minutos; el 06 es el más largo).
 4. `pytest -q` (57 pruebas).
 5. `streamlit run app/streamlit_app.py`.
@@ -133,5 +133,5 @@ Seis candidatos con los mismos pliegues por cliente: tasa base sin modelo, **reg
 - [x] Las 9 secciones tienen contenido y cada decisión lleva su motivo.
 - [x] Las cifras coinciden con `reports/07_validacion.md` y con la presentación.
 - [x] No hay credenciales, `.env` ni datos personales (la base cruda está en `.gitignore`).
-- [ ] El enlace de la app abre en una ventana privada _(tras desplegar)_.
+- [ ] La app abre en el computador de la demo (`streamlit run app/streamlit_app.py`).
 - [ ] Un tercero reprodujo el proyecto con el anexo _(verificarlo en el grupo)_.
