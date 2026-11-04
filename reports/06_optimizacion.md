@@ -2,6 +2,9 @@
 
 > Resultado de `notebooks/06_optimizacion.ipynb`. La mejor puntuación de una búsqueda es **optimista**: se comprueba
 > en clientes que la búsqueda no vio.
+>
+> **Cifras vigentes:** ejecución del 31-oct-2026 con la nueva numeración de clientes (ver `reports/07_validacion.md`,
+> sección 0). La versión del 30-oct, con la partición anterior, está en el historial de git (commit `e026f23`).
 
 ## Diseño de la búsqueda
 
@@ -19,18 +22,18 @@
 
 - **Presupuesto:** 30 ensayos para LightGBM y 20 para XGBoost, fijados antes de empezar (≈ 10 s por ensayo con 5 pliegues: ~10 minutos en total). Con 7 parámetros y una señal plana, más ensayos solo agregan oportunidades de ganar por azar.
 - **Objetivo:** PR-AUC de la mora en 5 pliegues por cliente (la métrica de negocio es demasiado ruidosa para guiar una búsqueda; ver `reports/04_features.md`).
-- **Clientes reservados:** 20 % de los clientes de entrenamiento (7.372 créditos), `GroupShuffleSplit` por cliente, semilla 42. La búsqueda usa el 80 % restante.
+- **Clientes reservados:** 20 % de los clientes de entrenamiento (7.404 créditos de 5.545 clientes), `GroupShuffleSplit` por cliente, semilla 42. La búsqueda usa el 80 % restante.
 
 ## Seguimiento (tracking)
 
 - **Dónde quedó registrado:** MLflow **local** (`mlflow_local.db`), experimento `libranzaradar-06-optimizacion`. El código usa Databricks automáticamente si `.env` tiene credenciales (`src/proyecto/tracking/mlflow_utils.py`); esta corrida se hizo sin credenciales del grupo. **Pendiente del grupo:** volver a correr los notebooks 05, 06 y 08 con `.env` configurado para que queden en Databricks.
 - **¿Está cada ensayo como una ejecución con parámetros, métrica y etiquetas?** ☒ sí ☐ no — 50 ejecuciones anidadas bajo `optuna-lightgbm` y `optuna-xgboost` (52 en total), cada una con todas las métricas de negocio y técnicas (media y desviación entre pliegues) y las etiquetas `etapa`, `modelo` y `metrica_optimizada`.
-- **Mejor ejecución:** LightGBM, ensayo 21, PR-AUC 0,1851 en la búsqueda (optimista). XGBoost: 0,1841.
+- **Mejor ejecución:** empate. LightGBM (ensayo 22) y XGBoost (ensayo 16) llegan a PR-AUC 0,1787 en la búsqueda (optimista).
 
 ## Resultados de la búsqueda
 
-- El rango de PR-AUC entre todos los ensayos fue estrecho: 0,173–0,185 (LightGBM) y 0,173–0,184 (XGBoost). La diferencia entre el mejor y el peor ensayo es del orden del ruido entre pliegues (± 0,003–0,005).
-- Los mejores ensayos prefieren árboles muy pequeños (LightGBM: 4 hojas; XGBoost: profundidad 3), tasas de aprendizaje bajas y poca proporción de columnas: es decir, **modelos casi lineales en el plazo**, coherente con el EDA.
+- El rango de PR-AUC entre todos los ensayos fue estrecho: 0,166–0,179 (LightGBM) y 0,169–0,179 (XGBoost) (`reports/06_optimizacion_tabla.csv`). La diferencia entre el mejor y el peor ensayo es del orden del ruido entre pliegues (± 0,004–0,005 en los mejores).
+- Los parámetros optimizados que se comprobaron (`reports/06_mejores_parametros.json`) son árboles muy pequeños (LightGBM: 8 hojas con al menos 529 créditos por hoja; XGBoost: profundidad 2), con tasas de aprendizaje bajas y poca proporción de columnas: es decir, **modelos casi lineales en el plazo**, coherente con el EDA.
 
 ## Comprobación honesta (clientes reservados)
 
@@ -38,8 +41,8 @@
 
 | Modelo | PR-AUC con parámetros de partida | PR-AUC con parámetros optimizados | Diferencia (optimizado − partida) | Intervalo 95 % |
 |---|---|---|---|---|
-| XGBoost | 0,1806 | 0,1827 | +0,0020 | [−0,0042 ; 0,0081] |
-| LightGBM | 0,1787 | 0,1805 | +0,0018 | [−0,0048 ; 0,0093] |
+| XGBoost | 0,1705 | 0,1736 | +0,0030 | [−0,0028 ; 0,0089] |
+| LightGBM | 0,1710 | 0,1738 | +0,0027 | [−0,0035 ; 0,0098] |
 
 **Regla de decisión escrita antes de mirar:** se adoptan los parámetros optimizados solo si el intervalo del 95 % de la diferencia queda **entero por encima de 0**.
 
@@ -47,9 +50,12 @@
 
 ## Decisión
 
-- **Parámetros que se usarán a partir de ahora:** los **de partida de XGBoost** (300 árboles, tasa 0,03, profundidad 4, `min_child_weight` 20, `subsample` 0,8, `colsample_bytree` 0,8). XGBoost es el finalista con mejor PR-AUC en los reservados; los de partida, porque la optimización no demostró mejora (`reports/06_eleccion.json`).
+- **Parámetros que se usarán a partir de ahora:** los **de partida de LightGBM** (300 árboles, tasa 0,03, 15 hojas, `min_child_samples` 100, `subsample` 0,8, `colsample_bytree` 0,8, `reg_lambda` 1,0) (`reports/06_eleccion.json`).
+- **Por qué LightGBM:** la regla de la celda 8, escrita antes de abrir la prueba, toma al finalista con mayor PR-AUC en los reservados. LightGBM gana por **0,0002** (0,1738 frente a 0,1736 con optimizados; 0,1710 frente a 0,1705 con los de partida), una diferencia unas 30 veces menor que el ruido: **es un empate** y la regla lo desempata.
+- **Por qué los de partida:** la optimización no demostró mejora en ninguno de los dos modelos.
+- **Detalle de la regla, para corregir:** la celda 8 compara el mayor PR-AUC entre parámetros de partida y optimizados, pero después usa los de partida. Lo correcto es comparar el PR-AUC de los parámetros que de verdad se usarán. Aquí no cambia el resultado, porque con los de partida LightGBM también queda arriba.
 - **Lo que no pudimos concluir:** si con más datos o variables nuevas la optimización ayudaría. Con esta señal, el límite lo ponen los datos, no los hiperparámetros.
 
 ## Para la clase siguiente
 
-XGBoost con parámetros de partida pasa a la validación (prueba abierta una sola vez) y al registro.
+LightGBM con parámetros de partida pasa a la validación y al registro. La prueba se abrió por tercera vez con esta ejecución; ver `reports/07_validacion.md`, sección 0.

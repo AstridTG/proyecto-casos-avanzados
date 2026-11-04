@@ -8,9 +8,9 @@
 
 ## Resultado en una línea
 
-Con la información disponible **al aprobar**, la base sintética casi no permite anticipar la mora: el mejor modelo
-(XGBoost) ordena el riesgo apenas mejor que el azar (AUC ≈ 0,53), igual que una regla simple de "plazo corto = más
-riesgo". El proyecto entrega el flujo completo (datos → modelo → seguimiento → app) y lo dice con honestidad. Cifras de
+Con la información disponible **al aprobar**, la base sintética casi no permite anticipar la mora: el modelo elegido
+(LightGBM) ordena el riesgo apenas mejor que el azar (AUC ≈ 0,54), igual que una regla simple de "plazo corto = más
+riesgo", y con su umbral casi nunca prioriza. **Recomendamos priorizar con la regla del plazo corto (plazo ≤ 6 meses).** El proyecto entrega el flujo completo (datos → modelo → seguimiento → app) y lo dice con honestidad. Cifras de
 la prueba en `reports/07_validacion.md`.
 
 ## Qué contiene
@@ -37,7 +37,7 @@ uv venv --python 3.12 .venv
 uv pip install --python .venv/Scripts/python.exe -r requirements.txt   # Mac/Linux: .venv/bin/python
 cp .env.example .env            # opcional: credenciales de Databricks; sin ellas se usa MLflow local
 # copia Base_sintetica_creditos.csv en data/raw/
-pytest -q                        # 55 pruebas (las del modelo real usan models/)
+pytest -q                        # 57 pruebas (las del modelo real usan models/)
 streamlit run app/streamlit_app.py
 ```
 

@@ -1,6 +1,9 @@
 # Registro del modelo
 
 > Resultado de `notebooks/08_registro_modelo.ipynb`. Datos en `reports/08_registro.json`.
+>
+> **Cifras vigentes:** registro del 31-oct-2026 con la nueva numeración de clientes (ver `reports/07_validacion.md`,
+> sección 0). La versión del 30-oct, con XGBoost, está en el historial de git (commit `e026f23`).
 
 ## 1. Dónde quedó registrado
 
@@ -11,20 +14,21 @@
 | Nombre del modelo registrado | `libranzaradar_mora30` |
 | Versión | 1 |
 | Alias | `champion` |
-| Quién lo registró y cuándo | _(completar: integrante)_ · 30-oct-2026 21:39 |
+| Quién lo registró y cuándo | _(completar: integrante)_ · 31-oct-2026 11:40 (run `309f85c4e934454f838ea98d449953f4`) |
 
 ## 2. Qué se registró junto al modelo
 
-- **Parámetros:** algoritmo (XGBoost), origen de los parámetros (partida), calibrado (no), umbral (0,192708) y los 6 hiperparámetros.
-- **Métricas de la prueba:** `test_recall` 0,149, `test_precision` 0,192, `test_pr_auc` 0,171, `test_auc` 0,527, `test_flag_rate` 0,118.
+- **Parámetros:** algoritmo (LightGBM), origen de los parámetros (partida), calibrado (no), umbral (0,300989) y los 7 hiperparámetros.
+- **Métricas de la prueba:** `test_recall` 0,000, `test_precision` 0,000, `test_pr_auc` 0,193, `test_auc` 0,544, `test_flag_rate` 0,0005. El recall es 0 porque el umbral congelado casi no marca créditos (`reports/07_validacion.md`, sección 0).
 - **Firma y ejemplo de entrada:** 12 columnas crudas: `term_months`, `loan_amount`, `monthly_installment`, `interest_rate_ea`, `due_day`, `has_guarantee`, `guarantee_value`, `has_cosigner` (numéricas) y `product`, `business_type`, `economic_destination`, `city` (texto). Salida: probabilidad de cada clase. Se guardan 5 filas de ejemplo.
 - **Etiquetas:** `etapa=08_registro`, `caso=libranzaradar`, `objetivo=mora_30`, `particion=por cliente (client_id)`, `prueba_abierta=una vez`. También se adjunta `decisiones_congeladas.json`.
-- **Formato:** `cloudpickle` (el pipeline incluye XGBoost y transformaciones de scikit-learn que `skops` no acepta). Solo se cargan modelos propios: `MLFLOW_ALLOW_PICKLE_DESERIALIZATION=true` se activa en los notebooks 08 y 09, nunca para modelos de terceros.
+- **⚠️ Etiqueta incorrecta:** `prueba_abierta=una vez` está escrita fija en el notebook 08, pero la prueba se abrió **tres veces** (`reports/prueba_abierta.txt`). Corregirla exige volver a registrar el modelo; mientras tanto, lo que vale es lo declarado en `reports/07_validacion.md`, sección 0.
+- **Formato:** `cloudpickle` (el pipeline incluye LightGBM y transformaciones de scikit-learn que `skops` no acepta). Solo se cargan modelos propios: `MLFLOW_ALLOW_PICKLE_DESERIALIZATION=true` se activa en los notebooks 08 y 09, nunca para modelos de terceros.
 
 ## 3. Comprobación de ida y vuelta
 
 - ¿El modelo recuperado del registro predice igual que el local? ☒ sí  ☐ no
-- **Cómo se comprobó:** se cargó `models:/libranzaradar_mora30@champion` y se comparó su `predict_proba` con el del pipeline local en 500 filas de la prueba. Diferencia máxima: **0,0**. En el notebook 09, `models/model.joblib` (exportado desde el registro) reproduce exactamente el recall de la prueba (0,148543).
+- **Cómo se comprobó:** se cargó `models:/libranzaradar_mora30@champion` y se comparó su `predict_proba` con el del pipeline local en 500 filas de la prueba. Diferencia máxima: **0,0**. En el notebook 09, `models/model.joblib` (exportado desde el registro) reproduce exactamente el recall de la prueba (0,000000, igual que en la etapa 7).
 
 ## 4. Tracking frente a registro
 
