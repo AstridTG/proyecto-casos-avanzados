@@ -28,7 +28,7 @@
 ## 3. Comprobación de ida y vuelta
 
 - ¿El modelo recuperado del registro predice igual que el local? ☒ sí  ☐ no
-- **Cómo se comprobó:** se cargó `models:/libranzaradar_mora30@champion` y se comparó su `predict_proba` con el del pipeline local en 500 filas de la prueba. Diferencia máxima: **0,0**. En el notebook 09, `models/model.joblib` (exportado desde el registro) reproduce exactamente el recall de la prueba (0,000000, igual que en la etapa 7).
+- **Cómo se comprobó:** se cargó `models:/libranzaradar_mora30@champion` y se comparó su `predict_proba` con el del pipeline local en 500 filas de la prueba. Diferencia máxima: **0,0**. *(Cambio del 3-nov-2026: la celda 5 ahora hace esta comprobación con 500 filas del **entrenamiento**, para que el notebook 08 no lea la prueba. El código no se volvió a ejecutar; el 0,0 de arriba es de la ejecución del 31-oct.)* En el notebook 09, `models/model.joblib` (exportado desde el registro) reproduce exactamente el recall de la prueba (0,000000, igual que en la etapa 7).
 
 ## 4. Tracking frente a registro
 
