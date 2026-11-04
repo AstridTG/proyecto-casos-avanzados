@@ -20,9 +20,9 @@
   quedaron empatados (PR-AUC de partida: LightGBM 0,1710 frente a XGBoost 0,1705, con un ruido de ±0,006) y la
   regla escoge a LightGBM. No se vuelve a XGBoost: hacerlo ahora, después de ver las dos pruebas, sería usar la
   prueba para decidir.
-- **Detalle de la regla (para corregir, sin volver a abrir la prueba):** la celda 8 del notebook 06 compara el mayor
-  PR-AUC entre parámetros de partida y optimizados, pero después usa los de partida. Aquí no cambia el resultado,
-  porque con los de partida LightGBM también queda arriba.
+- **Corrección de la regla (3-nov-2026, sin abrir la prueba):** la celda 8 del notebook 06 comparaba el mayor
+  PR-AUC entre parámetros de partida y optimizados, aunque después usara los de partida. Se corrigió para comparar los
+  parámetros que de verdad se usan y se volvió a ejecutar el 06: la elección no cambió (`reports/06_optimizacion.md`).
 
 ### Aperturas de la prueba (`reports/prueba_abierta.txt`)
 

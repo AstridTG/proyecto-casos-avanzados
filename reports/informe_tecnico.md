@@ -74,7 +74,7 @@ Seis candidatos con los mismos pliegues por cliente: tasa base sin modelo, **reg
 - **Búsqueda:** Optuna, 30 ensayos de LightGBM y 20 de XGBoost, objetivo PR-AUC, en el 80 % de los clientes de entrenamiento. El espacio favorece árboles pequeños y regularizados, por la señal débil.
 - **Seguimiento:** cada ensayo es una ejecución anidada en MLflow con todas las métricas (52 ejecuciones en `libranzaradar-06-optimizacion`), además de los experimentos de variables (6), torneo (6) y registro (1). Corrida de referencia en **MLflow local**; el código cambia a Databricks con `.env`.
 - **Comprobación honesta** en el 20 % de clientes reservados: XGBoost +0,0030 de PR-AUC (IC [−0,0028 ; +0,0089]) y LightGBM +0,0027 (IC [−0,0035 ; +0,0098]). **Regla escrita antes:** adoptar los optimizados solo si el intervalo queda entero sobre 0. **No se cumple → parámetros de partida.**
-- **Elección del modelo:** la regla escrita antes de la prueba toma al finalista con mayor PR-AUC en los reservados. LightGBM gana por 0,0002, unas 30 veces menos que el ruido: **es un empate** que la regla desempata a favor de LightGBM.
+- **Elección del modelo:** la regla escrita antes de la prueba toma al finalista con mayor PR-AUC en los reservados. Con los parámetros de partida, que son los que se usan, LightGBM gana por 0,0005 (0,1710 frente a 0,1705), unas 12 veces menos que el ruido: **es un empate** que la regla desempata a favor de LightGBM.
 
 ## 6. Validación e interpretación
 

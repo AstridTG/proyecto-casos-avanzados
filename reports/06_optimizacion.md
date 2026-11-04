@@ -51,9 +51,9 @@
 ## Decisión
 
 - **Parámetros que se usarán a partir de ahora:** los **de partida de LightGBM** (300 árboles, tasa 0,03, 15 hojas, `min_child_samples` 100, `subsample` 0,8, `colsample_bytree` 0,8, `reg_lambda` 1,0) (`reports/06_eleccion.json`).
-- **Por qué LightGBM:** la regla de la celda 8, escrita antes de abrir la prueba, toma al finalista con mayor PR-AUC en los reservados. LightGBM gana por **0,0002** (0,1738 frente a 0,1736 con optimizados; 0,1710 frente a 0,1705 con los de partida), una diferencia unas 30 veces menor que el ruido: **es un empate** y la regla lo desempata.
+- **Por qué LightGBM:** la regla de la celda 8, escrita antes de abrir la prueba, toma al finalista con mayor PR-AUC en los reservados **con los parámetros que se usarán** (aquí, los de partida). LightGBM gana por **0,0005** (0,1710 frente a 0,1705), una diferencia unas 12 veces menor que el ruido (± 0,006): **es un empate** y la regla lo desempata.
 - **Por qué los de partida:** la optimización no demostró mejora en ninguno de los dos modelos.
-- **Detalle de la regla, para corregir:** la celda 8 compara el mayor PR-AUC entre parámetros de partida y optimizados, pero después usa los de partida. Lo correcto es comparar el PR-AUC de los parámetros que de verdad se usarán. Aquí no cambia el resultado, porque con los de partida LightGBM también queda arriba.
+- **Corrección de la regla (3-nov-2026):** la celda 8 comparaba el mayor PR-AUC entre parámetros de partida y optimizados, aunque después usara los de partida. Ahora compara el PR-AUC de los parámetros que de verdad se usarán. Se volvió a ejecutar el notebook 06, que solo usa el entrenamiento y carga las búsquedas de Optuna ya guardadas, sin ensayos nuevos. **Todos sus archivos salieron idénticos** y la elección no cambió: LightGBM con parámetros de partida.
 - **Lo que no pudimos concluir:** si con más datos o variables nuevas la optimización ayudaría. Con esta señal, el límite lo ponen los datos, no los hiperparámetros.
 
 ## Para la clase siguiente
