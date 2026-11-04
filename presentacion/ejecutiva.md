@@ -22,40 +22,42 @@ footer: "Casos Avanzados · Maestría en Ingeniería Analítica"
 - **Datos:** 60.000 créditos sintéticos de libranza (41.855 clientes). Quitamos datos personales al cargar.
 - **Solo lo que se sabe al aprobar:** plazo, monto, cuota, tasa, garantía, codeudor, producto y ciudad. Saldos, pagos y estado contienen la respuesta.
 - **Dos trampas que evitamos:** 3.619 créditos vencidos con el plazo **reescrito a 1 mes** y 10.331 créditos **demasiado nuevos** para caer en mora.
-- **Validación honesta:** partición **por cliente** y prueba abierta una sola vez.
+- **Validación honesta:** partición **por cliente** y una prueba con clientes que el modelo nunca vio (abierta 3 veces, declarado en el informe).
 - **Comparamos 5 modelos** contra una regla de analista ("plazo corto = más riesgo"). La historia del cliente, la empresa pagadora y la edad **no aportaron**.
 
 ---
 
-# 3 · Resultado: el modelo empata con la regla simple
+# 3 · Resultado: el modelo no supera a la regla simple
 
-| Al mes (≈ 380 moras) | Regla: plazo ≤ 9 meses | Modelo (XGBoost) |
+| Al mes (≈ 385 moras) | Regla: plazo ≤ 6 meses | Modelo (LightGBM) |
 |---|---|---|
-| Créditos priorizados | ≈ 296 | ≈ 280 |
-| Moras detectadas | ≈ 59 (15 %) | ≈ 56 (15 %) |
-| Precisión | 19 % | 19 % |
+| Créditos priorizados | ≈ 214 | ≈ 1 |
+| Moras detectadas | ≈ 52 (13 %) | 0 |
+| Precisión | 24 % | — |
 
-- Diferencia de recall modelo − regla: **−0,6 puntos**, IC 95 % [−2,0 ; +1,0]: **no hay mejora.**
-- Con lo que se sabe al aprobar, **8 de cada 10 moras no se pueden anticipar.**
-- *Nota técnica:* AUC 0,53 en prueba (0,50 = azar).
+- Con su umbral, el modelo **casi nunca prioriza**: la regla gana por **13 puntos de recall**, IC 95 % [11,6 ; 15,1].
+- Para **ordenar** el riesgo, empatan (PR-AUC 0,193 frente a 0,186; la diferencia incluye el cero).
+- Con lo que se sabe al aprobar, **casi 9 de cada 10 moras no se pueden anticipar.**
+- *Cifras mensuales estimadas con las tasas de la prueba. Nota técnica:* AUC 0,54 en prueba (0,50 = azar).
 
 ---
 
 # 4 · Demo de la app
 
-**Enlace:** _(completar con el enlace público)_
+**En local:** `streamlit run app/streamlit_app.py` (la app no se publica en la nube).
 
-1. **Caso normal:** crédito a 36 meses → 🟢 seguimiento normal (15 %).
-2. **Caso límite:** crédito a 6 meses → 🔴 priorizar (23 %, 1,5 veces el promedio). La app muestra qué dato pesó: el plazo.
-3. **Dato inválido:** plazo = −5 → "Revisa los datos: Plazo (meses) debe estar entre 1 y 360".
+1. **Aviso al abrir:** la app dice que el modelo no supera a la regla y recomienda priorizar por plazo ≤ 6 meses.
+2. **Caso normal:** crédito a 36 meses → 🟢 seguimiento normal (16 %, igual al promedio).
+3. **Plazo corto:** crédito a 6 meses → 22 %, 1,4 veces el promedio, pero 🟢 seguimiento normal: no llega al umbral del modelo (30 %). La regla del plazo corto sí lo priorizaría. La app muestra qué dato pesó: el plazo.
+4. **Dato inválido:** plazo = −5 → "Revisa los datos: Plazo (meses) debe estar entre 1 y 360".
 
-> Plan B: captura con fecha y la app en local (`streamlit run app/streamlit_app.py`).
+> Plan B: captura con fecha y la app abierta antes de empezar.
 
 ---
 
 # 5 · Riesgos y siguientes pasos
 
 - **Qué NO hace:** no aprueba ni niega créditos, no fija tasas, no se usa para tratar distinto a un cliente. Decide el analista.
-- **Límites:** base **sintética**; mora medida al corte (exposiciones distintas); precisión en prueba 19 %, un poco por debajo del 20 % pedido.
+- **Límites:** base **sintética**; mora medida al corte (exposiciones distintas); el umbral del modelo, elegido en validación, casi no marca créditos.
 - **Uso responsable:** no usa sexo, estado civil ni edad. Vigilar las tasas de marcado por ciudad.
-- **Recomendación:** hoy, priorizar con la **regla del plazo corto** (transparente e igual de buena). Para mejorar de verdad, **capturar mejores datos al aprobar:** capacidad de pago, endeudamiento en centrales de riesgo, antigüedad laboral y salud de la empresa pagadora.
+- **Recomendación:** hoy, priorizar con la **regla del plazo corto** (transparente y mejor que el modelo con su umbral). Para mejorar de verdad, **capturar mejores datos al aprobar:** capacidad de pago, endeudamiento en centrales de riesgo, antigüedad laboral y salud de la empresa pagadora.

@@ -1,7 +1,7 @@
 ,recall con precisión ≥ 20 % (media),± entre pliegues,precisión lograda,% de créditos marcados,segundos de ajuste
-random forest,0.195,0.05,0.2,0.156,13.203
-xgboost,0.188,0.095,0.2,0.151,0.821
-lightgbm,0.186,0.075,0.2,0.15,0.769
-línea base: regla del plazo corto,0.149,0.02,0.21,0.114,0.006
-regresión logística,0.116,0.092,0.2,0.093,0.353
-línea base: tasa de mora (sin modelo),0.0,0.0,0.0,0.0,0.014
+línea base: regla del plazo corto,0.113,0.068,0.168,0.085,0.003
+xgboost,0.095,0.058,0.2,0.075,1.186
+regresión logística,0.059,0.057,0.16,0.047,0.171
+lightgbm,0.059,0.078,0.2,0.047,0.531
+random forest,0.035,0.038,0.16,0.028,4.428
+línea base: tasa de mora (sin modelo),0.0,0.0,0.0,0.0,0.011

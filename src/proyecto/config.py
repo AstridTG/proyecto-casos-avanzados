@@ -13,6 +13,12 @@ REPORTS_DIR = ROOT / "reports"
 
 RANDOM_STATE = 42
 
+# ---------------------------------------------------------------- reproducibilidad de la partición
+# Huella SHA-256 del CSV original y cifras que debe dar la partición del notebook 03. Si algo no coincide, el CSV,
+# el código, la semilla o las librerías no son los mismos del grupo y cada persona obtendría una partición distinta.
+RAW_SHA256 = "7e72fe8ece757041868c734fd0067f1df201e2234528504b9d25d27c9818d77b"
+EXPECTED_SPLIT = {"filas_entrenamiento": 36872, "filas_prueba": 9178, "clientes_prueba": 6932}
+
 # ---------------------------------------------------------------- unidad de análisis y objetivo
 GROUP_COL = "client_id"  # un cliente puede tener hasta 4 créditos: se parte por cliente, no por fila
 TARGET = "mora_30"       # 1 si DIAS DE MORA > 30

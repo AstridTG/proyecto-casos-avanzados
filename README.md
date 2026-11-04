@@ -4,13 +4,13 @@
 > probabilidad de que caigan en más de 30 días de mora. Para el analista de crédito de una caja de compensación,
 > que conserva la decisión final.
 
-**App desplegada:** _(enlace público de Streamlit Community Cloud: se completa al desplegar, ver `reports/09_despliegue.md`)_
+**App:** corre **en local** (`streamlit run app/streamlit_app.py`); no se publica en la nube (aprobado por el profesor el 3-nov-2026). Ver `reports/09_despliegue.md`.
 
 ## Resultado en una línea
 
-Con la información disponible **al aprobar**, la base sintética casi no permite anticipar la mora: el mejor modelo
-(XGBoost) ordena el riesgo apenas mejor que el azar (AUC ≈ 0,53), igual que una regla simple de "plazo corto = más
-riesgo". El proyecto entrega el flujo completo (datos → modelo → seguimiento → app) y lo dice con honestidad. Cifras de
+Con la información disponible **al aprobar**, la base sintética casi no permite anticipar la mora: el modelo elegido
+(LightGBM) ordena el riesgo apenas mejor que el azar (AUC ≈ 0,54), igual que una regla simple de "plazo corto = más
+riesgo", y con su umbral casi nunca prioriza. **Recomendamos priorizar con la regla del plazo corto (plazo ≤ 6 meses).** El proyecto entrega el flujo completo (datos → modelo → seguimiento → app) y lo dice con honestidad. Cifras de
 la prueba en `reports/07_validacion.md`.
 
 ## Qué contiene
@@ -35,9 +35,9 @@ Requiere Python 3.12 y [uv](https://docs.astral.sh/uv/) (o `python -m venv` + `p
 ```bash
 uv venv --python 3.12 .venv
 uv pip install --python .venv/Scripts/python.exe -r requirements.txt   # Mac/Linux: .venv/bin/python
-cp .env.example .env            # opcional: credenciales de Databricks; sin ellas se usa MLflow local
+# no hace falta .env: el seguimiento usa MLflow local
 # copia Base_sintetica_creditos.csv en data/raw/
-pytest -q                        # 55 pruebas (las del modelo real usan models/)
+pytest -q                        # 57 pruebas (las del modelo real usan models/)
 streamlit run app/streamlit_app.py
 ```
 
@@ -66,8 +66,8 @@ Si al final pide reiniciar, puedes elegir *Close*. Comprueba con
 
 ### Seguimiento de experimentos (MLflow)
 
-`src/proyecto/tracking/mlflow_utils.py` usa **Databricks** si `.env` tiene `PROFILE` o `DATABRICKS_HOST` + `DATABRICKS_TOKEN`,
-y **MLflow local** (`mlflow_local.db`) si no. Para ver los experimentos locales:
+El proyecto usa **MLflow local** (`mlflow_local.db`), aprobado por el profesor el 3-nov-2026. `src/proyecto/tracking/mlflow_utils.py` conserva la
+opción de Databricks si `.env` tiene `PROFILE` o `DATABRICKS_HOST` + `DATABRICKS_TOKEN`, pero no se usa. Para ver los experimentos locales:
 
 ```bash
 mlflow ui --backend-store-uri sqlite:///mlflow_local.db
@@ -80,9 +80,12 @@ anidada) y `-08-registro`. Modelo registrado: `libranzaradar_mora30`, alias `cha
 
 | Integrante | Rol |
 |---|---|
-| _(completar)_ | Datos |
-| _(completar)_ | Modelado |
-| _(completar)_ | App |
-| _(completar)_ | Negocio y reporte |
+| Juan Rafael Taborda | _(completar)_ |
+| Yenifer Tatiana Calle Zapata | _(completar)_ |
+| Daniela Acevedo Alvares | _(completar)_ |
+| Liliana Maria Garcia Builes | _(completar)_ |
+| Astrid Liliana Torres Gonzalez | _(completar)_ |
+
+Repositorio: <https://github.com/AstridTG/proyecto-casos-avanzados>
 
 Especificación del proyecto: [`especificacion-proyecto.md`](especificacion-proyecto.md) · Informe técnico: [`reports/informe_tecnico.md`](reports/informe_tecnico.md)

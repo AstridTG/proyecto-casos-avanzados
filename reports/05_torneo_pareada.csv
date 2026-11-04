@@ -1,5 +1,5 @@
 A,B,métrica,diferencia media (A − B),pliegues que gana A,diferencia / ruido
-xgboost,lightgbm,pr_auc,0.0008,3 de 5,0.35
-xgboost,línea base: regla del plazo corto,pr_auc,0.0024,4 de 5,0.92
-xgboost,línea base: regla del plazo corto,recall_at_p,0.039,4 de 5,0.47
-xgboost,línea base: regla del plazo corto,roc_auc,0.0002,3 de 5,0.02
+xgboost,lightgbm,pr_auc,0.0008,3 de 5,0.38
+xgboost,línea base: regla del plazo corto,pr_auc,-0.0026,1 de 5,-0.48
+xgboost,línea base: regla del plazo corto,recall_at_p,-0.0175,1 de 5,-0.77
+xgboost,línea base: regla del plazo corto,roc_auc,-0.01,0 de 5,-3.09

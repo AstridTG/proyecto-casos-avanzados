@@ -8,7 +8,7 @@ Este archivo lo lees al inicio de cada conversación. Sigue estas reglas siempre
   Explica lo que haces, con palabras simples, antes y después de cambiar código.
 - Trabajo en un grupo. Estamos construyendo un proyecto de machine learning de principio a fin,
   como si fuera una startup: caso de negocio, EDA, preprocesamiento, features, torneo de modelos,
-  optimización, validación, tracking en Databricks, app en Streamlit, reporte y presentación.
+  optimización, validación, tracking en MLflow local, app en Streamlit (local), reporte y presentación.
 - El caso, el dataset, la métrica y el tipo de problema están en `especificacion-proyecto.md`.
   **Léelo antes de generar código** y avísame si algo del pedido lo contradice.
 - Cada etapa tiene su especificación en `especificaciones/` (`02-eda.md`, `03-preprocesamiento.md`…). Si la
@@ -63,8 +63,9 @@ scripts/
 5. **Todo preprocesamiento va dentro de un `Pipeline`** ajustado solo con entrenamiento, para
    evitar fuga de información.
 6. **Cada decisión de datos se escribe con su motivo** en `reports/`, no solo en el código.
-7. **El seguimiento de experimentos usa MLflow en Databricks.** Lee la conexión desde `.env`
-   (`PROFILE` o `DATABRICKS_HOST` y `DATABRICKS_TOKEN`). Define `PYTHONUTF8=1` en Windows.
+7. **El seguimiento de experimentos y el registro del modelo usan MLflow local** (`mlflow_local.db`, que no se
+   sube al repo). No se usa Databricks: se descartó con aprobación del profesor (3-nov-2026). Define
+   `PYTHONUTF8=1` en Windows.
 8. **La app NO consulta Databricks.** Carga `models/model.joblib` desde el repositorio. Valida
    las entradas del formulario y muestra un aviso de uso responsable.
 9. **Pruebas.** Cada función de `src/` que limpia datos o transforma variables debe tener una

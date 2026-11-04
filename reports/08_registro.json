@@ -4,8 +4,8 @@
   "modelo_registrado": "libranzaradar_mora30",
   "version": 1,
   "alias": "champion",
-  "run_id": "cd7c622451dc4eda8fe975b10a69a1df",
-  "model_uri": "models:/m-2473bca9e60045a7b123902f48961b6e",
+  "run_id": "309f85c4e934454f838ea98d449953f4",
+  "model_uri": "models:/m-0f2fb12735e84727a3fff8a189b9e719",
   "columnas_entrada": [
     "term_months",
     "loan_amount",

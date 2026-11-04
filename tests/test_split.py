@@ -3,7 +3,9 @@ import pandas as pd
 import pytest
 
 from proyecto.config import GROUP_COL, TARGET
-from proyecto.data.split import assert_disjoint_groups, group_cv, split_by_group
+from proyecto.data.split import (
+    ReproducibilityError, assert_disjoint_groups, check_split_reproducibility, file_sha256, group_cv, split_by_group,
+)
 
 
 @pytest.fixture
@@ -32,6 +34,28 @@ def test_disjoint_check_detects_a_row_wise_split(df):
     cut = int(len(df) * 0.8)
     with pytest.raises(AssertionError, match="más de una partición"):
         assert_disjoint_groups(shuffled.iloc[:cut], shuffled.iloc[cut:])
+
+
+def test_reproducibility_check_passes_with_same_file_and_counts(df, tmp_path):
+    raw = tmp_path / "base.csv"
+    raw.write_text("a,b\n1,2\n", encoding="utf-8")
+    train, test = split_by_group(df)
+    expected = {"filas_entrenamiento": len(train), "filas_prueba": len(test), "clientes_prueba": test[GROUP_COL].nunique()}
+    assert check_split_reproducibility(raw, train, test, expected_sha256=file_sha256(raw), expected=expected) == expected
+
+
+def test_reproducibility_check_fails_if_csv_changes_or_split_differs(df, tmp_path):
+    raw = tmp_path / "base.csv"
+    raw.write_text("a,b\n1,2\n", encoding="utf-8")
+    sha = file_sha256(raw)
+    train, test = split_by_group(df)
+    expected = {"filas_entrenamiento": len(train), "filas_prueba": len(test), "clientes_prueba": test[GROUP_COL].nunique()}
+    raw.write_text("a,b\n1,3\n", encoding="utf-8")            # alguien editó el CSV
+    with pytest.raises(ReproducibilityError, match="huella del CSV"):
+        check_split_reproducibility(raw, train, test, expected_sha256=sha, expected=expected)
+    other_train, other_test = split_by_group(df, seed=7)      # otra semilla: otra partición
+    with pytest.raises(ReproducibilityError, match="filas_prueba"):
+        check_split_reproducibility(raw, other_train, other_test, expected_sha256=file_sha256(raw), expected=expected)
 
 
 def test_group_cv_keeps_each_client_in_one_fold(df):

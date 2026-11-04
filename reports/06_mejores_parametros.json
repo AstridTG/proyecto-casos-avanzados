@@ -9,20 +9,20 @@
       "colsample_bytree": 0.8
     },
     "optimizados": {
-      "n_estimators": 425,
-      "learning_rate": 0.005812147484867253,
-      "max_depth": 3,
-      "min_child_weight": 7.814007662286242,
-      "subsample": 0.6390766531154153,
-      "colsample_bytree": 0.4043747606302089,
-      "reg_lambda": 1.7862139110413615
+      "n_estimators": 459,
+      "learning_rate": 0.014189824976267343,
+      "max_depth": 2,
+      "min_child_weight": 80.30023192201323,
+      "subsample": 0.7064306017106741,
+      "colsample_bytree": 0.7653444463339153,
+      "reg_lambda": 1.1536125185719195
     },
-    "pr_auc_reservado_partida": 0.18062431718365785,
-    "pr_auc_reservado_optimizado": 0.18265385711279442,
-    "diferencia": 0.00202953992913657,
+    "pr_auc_reservado_partida": 0.17053222347205835,
+    "pr_auc_reservado_optimizado": 0.17357717448917634,
+    "diferencia": 0.0030449510171179917,
     "ic95": [
-      -0.004209143614406181,
-      0.008101674028610275
+      -0.0028285037766701106,
+      0.008871747380065676
     ],
     "adoptar_optimizados": false
   },
@@ -37,20 +37,20 @@
       "reg_lambda": 1.0
     },
     "optimizados": {
-      "n_estimators": 207,
-      "learning_rate": 0.012450377290310472,
-      "num_leaves": 4,
-      "min_child_samples": 54,
-      "subsample": 0.5073330405249352,
-      "colsample_bytree": 0.7597479024402375,
-      "reg_lambda": 0.4406894700203129
+      "n_estimators": 253,
+      "learning_rate": 0.008258474044671952,
+      "num_leaves": 8,
+      "min_child_samples": 529,
+      "subsample": 0.7873662596255663,
+      "colsample_bytree": 0.5631031245133084,
+      "reg_lambda": 0.19528594670025382
     },
-    "pr_auc_reservado_partida": 0.17871728536124978,
-    "pr_auc_reservado_optimizado": 0.18048779730971226,
-    "diferencia": 0.0017705119484624776,
+    "pr_auc_reservado_partida": 0.1710456756765592,
+    "pr_auc_reservado_optimizado": 0.17379268004377973,
+    "diferencia": 0.002747004367220529,
     "ic95": [
-      -0.004843426643154293,
-      0.009311325805444212
+      -0.0034767065115581842,
+      0.009833986195248048
     ],
     "adoptar_optimizados": false
   }

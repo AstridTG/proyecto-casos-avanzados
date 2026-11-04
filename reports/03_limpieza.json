@@ -10,9 +10,9 @@
   "clientes_finales": 34657,
   "tasa_mora_final": 0.15915309446254072,
   "columnas_finales": 17,
-  "filas_entrenamiento": 36857,
-  "filas_prueba": 9193,
+  "filas_entrenamiento": 36872,
+  "filas_prueba": 9178,
   "clientes_entrenamiento": 27725,
   "clientes_prueba": 6932,
-  "tasa_mora_entrenamiento": 0.16067504137612937
+  "tasa_mora_entrenamiento": 0.15825016272510306
 }
