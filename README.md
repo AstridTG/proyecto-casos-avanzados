@@ -6,6 +6,8 @@
 
 **App:** corre **en local** (`streamlit run app/streamlit_app.py`); no se publica en la nube (aprobado por el profesor el 3-nov-2026). Ver `reports/09_despliegue.md`.
 
+**Atajo en Windows:** doble clic en `scripts/run_app.bat`. Revisa el entorno y el modelo, arranca la app solo para este computador y abre el navegador en <http://localhost:8501>.
+
 ## Resultado en una línea
 
 Con la información disponible **al aprobar**, la base sintética casi no permite anticipar la mora: el modelo elegido

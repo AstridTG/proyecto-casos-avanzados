@@ -174,6 +174,39 @@ def miles(n: int) -> str:
     return f"{int(n):,}".replace(",", ".")
 
 
+RESULT_COLUMN_HELP = {
+    "credito": "Número del crédito en el sistema (NUMERO DE LA COLOCACION). No es un dato personal. "
+               "Si el archivo no lo trae, se numera 1, 2, 3…",
+    "veces_el_promedio": "Probabilidad dividida por la tasa de mora promedio del entrenamiento. "
+                         "1 = riesgo promedio; 1,4 = 40 % más que el promedio; menos de 1 = menos que el promedio.",
+    "prioridad": "Sugerencia del modelo: «Priorizar revisión» si la probabilidad supera su umbral; si no, «Seguimiento "
+                 "normal». Casi nunca prioriza: «Seguimiento normal» NO significa riesgo bajo. Se recomienda priorizar "
+                 "con la regla del plazo corto (plazo ≤ 6 meses). Los reestructurados tras la mora salen como «Excluido».",
+    "cerca_del_umbral": "Sí, si la probabilidad queda a menos de 0,5 puntos del umbral: un pequeño cambio en los datos "
+                        "cambiaría la sugerencia. Revíselo con su criterio.",
+    "datos_corregidos": "Columnas que traían un valor imposible o no numérico. Ese dato se dejó vacío y el modelo lo "
+                        "completó: revise ese dato en el sistema. Vacía = todo bien.",
+    "mora_30_real": "1 si el archivo dice que el crédito YA tiene más de 30 días de mora (DIAS DE MORA). Solo para "
+                    "comparar: no mide qué tan bueno es el modelo, porque el archivo puede incluir créditos con los que "
+                    "se entrenó y créditos muy nuevos.",
+}
+
+
+def batch_column_config(schema: dict, max_proba: float) -> dict:
+    """Encabezados de la tabla de carga masiva con una explicación al pasar el mouse (tooltip)."""
+    threshold = float(schema["threshold"])
+    config = {name: st.column_config.Column(name, help=text) for name, text in RESULT_COLUMN_HELP.items()}
+    config["probabilidad_mora_30"] = st.column_config.ProgressColumn(
+        "Probabilidad de mora > 30 días", format="%.3f", min_value=0.0, max_value=max_proba,
+        help=f"Probabilidad estimada de que el crédito pase de 30 días de mora (0,22 = 22 %). Ordena el riesgo; no es "
+             f"una certeza. El modelo prioriza desde {threshold:.1%}.")
+    for column in schema["numeric"] + schema["categorical"]:   # los 12 datos que usó el modelo
+        config[column] = st.column_config.Column(
+            column, help=f"Dato usado por el modelo: {label(schema, column)}. Si está vacío, faltaba o se corrigió y el "
+                         "modelo lo completó con un valor típico.")
+    return config
+
+
 def batch_credits(schema: dict) -> None:
     """Pestaña 2: un archivo con muchos créditos."""
     st.markdown(
@@ -212,9 +245,9 @@ def batch_credits(schema: dict) -> None:
 
     only_priority = st.toggle("Ver solo los créditos a priorizar", value=True)
     view = scored[scored["prioridad"] == batch_module.PRIORITY] if only_priority else scored
+    st.caption("Pase el mouse por el encabezado de una columna para ver qué significa.")
     st.dataframe(view, use_container_width=True, hide_index=True,
-                 column_config={"probabilidad_mora_30": st.column_config.ProgressColumn(
-                     "Probabilidad de mora > 30 días", format="%.3f", min_value=0.0, max_value=float(max(0.5, scored["probabilidad_mora_30"].max())))})
+                 column_config=batch_column_config(schema, float(max(0.5, scored["probabilidad_mora_30"].max()))))
     csv = scored.to_csv(index=False, sep=";", decimal=",").encode("utf-8-sig")  # se abre bien en Excel en español
     st.download_button("⬇ Descargar resultados (CSV para Excel)", csv, file_name="libranzaradar_resultados.csv",
                        mime="text/csv", type="primary")

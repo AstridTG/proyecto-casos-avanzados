@@ -11,9 +11,13 @@
 | Por qué en local | Decisión del grupo del 3-nov-2026, **aprobada por el profesor**: la app y el seguimiento de experimentos (MLflow) quedan en local. No se publica en Streamlit Community Cloud ni se usa Databricks |
 | Repo, rama y archivo principal | <https://github.com/AstridTG/proyecto-casos-avanzados> · `main` · `app/streamlit_app.py` |
 | Versión de Python | ☒ 3.12  ☐ otra |
-| ¿Se comprobó en el computador de la demo? | ☐ sí  ☐ no _(completar)_ |
+| ¿Se comprobó en el computador de la demo? | ☒ sí  ☐ no — las pruebas del 3-nov (sección 3) se hicieron en el computador de la demo |
 
 ### Pasos para correr la app (≈ 5 minutos la primera vez)
+
+**Atajo en Windows:** doble clic en `scripts/run_app.bat`. Si la app ya está abierta, solo abre el navegador. Si falta el entorno `.venv`, lo crea con `uv`. Revisa que estén el modelo y su esquema, arranca la app en <http://localhost:8501> (solo este computador puede abrirla, `--server.address localhost`) y abre el navegador. Para detenerla: Ctrl+C en la ventana negra. Probado el 3-nov-2026 en el computador de la demo.
+
+Pasos a mano:
 
 1. Clonar el repo y crear el entorno con Python 3.12: `uv venv --python 3.12 .venv` y `uv pip install --python .venv/Scripts/python.exe -r requirements.txt` (Mac/Linux: `.venv/bin/python`).
 2. Comprobar que `models/model.joblib` y `models/input_schema.json` estén en el repo: la app no necesita la base cruda ni volver a entrenar.
