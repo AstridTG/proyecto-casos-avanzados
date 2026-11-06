@@ -57,9 +57,9 @@ footer: "Casos Avanzados · Maestría en Ingeniería Analítica"
 
 # 5 · Riesgos y siguientes pasos
 
-- **Qué NO hace:** no aprueba ni niega créditos, no fija tasas, no se usa para tratar distinto a un cliente. Decide el analista.
-- **Límites:** base **sintética**; mora medida al corte (exposiciones distintas); el umbral del modelo, elegido en validación, casi no marca créditos.
-- **Uso responsable:** no usa sexo, estado civil ni edad. Vigilar las tasas de marcado por ciudad.
-- **Recomendación:** hoy, priorizar con la **regla del plazo corto** (transparente y mejor que el modelo con su umbral). Para mejorar de verdad, **capturar mejores datos al aprobar:** capacidad de pago, endeudamiento en centrales de riesgo, antigüedad laboral y salud de la empresa pagadora.
+- **Qué NO hace:** no aprueba ni niega créditos ni fija tasas. Decide el analista.
+- **Límites:** base **sintética**; el umbral del modelo casi no marca créditos.
+- **Uso responsable:** no usa sexo, estado civil ni edad.
+- **Hoy:** priorizar con la **regla del plazo corto** y **capturar mejores datos al aprobar** (capacidad de pago, centrales de riesgo, antigüedad laboral).
 
-> **LibranzaRadar 2.0 (escenario futuro):** si la caja revisa 1 de cada 5 créditos (80 % de los créditos al día sin alerta), ordenar por **pérdida esperada = probabilidad × monto** cubre ≈ **75 % del dinero** que cae en mora, frente a ≈ 14 % del modelo actual y ≈ 20 % al azar. Hoy esa ganancia la da el monto; el modelo sumará con mejores datos. *Cifras de validación; requiere una prueba nueva.*
+> **LibranzaRadar 2.0 (escenario):** revisando 1 de cada 5 créditos, ordenar por **probabilidad × monto** cubre ≈ **75 % del dinero** en mora (modelo actual ≈ 14 %, azar ≈ 20 %). Hoy lo explica el monto. *Cifras de validación.*
