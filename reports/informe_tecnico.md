@@ -148,7 +148,8 @@ Seis candidatos con los mismos pliegues por cliente: tasa base sin modelo, **reg
 
 1. `uv venv --python 3.12 .venv` y `uv pip install --python .venv/bin/python -r requirements.txt` (en Windows: `.venv/Scripts/python.exe` y `$env:PYTHONUTF8=1`).
 2. Copiar `Base_sintetica_creditos.csv` a `data/raw/`. No hace falta `.env`: el seguimiento usa MLflow local.
-3. Ejecutar los notebooks `01` a `09` en orden (≈ 25 minutos; el 06 es el más largo).
+3. Ejecutar los notebooks `01` a `06` en orden (≈ 20 minutos; el 06 es el más largo) y comprobar con `git status --short reports/` que las tablas y JSON no cambian.
+   **No ejecutar el `07`** (ni el `08` y el `09`, que dependen de él): el 07 abre la prueba y sumaría una apertura más en `reports/prueba_abierta.txt`. Sus resultados ya están en `reports/07_metricas_test.json`.
 4. `pytest -q` (57 pruebas).
 5. `streamlit run app/streamlit_app.py`.
 

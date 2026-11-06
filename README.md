@@ -43,16 +43,23 @@ pytest -q                        # 57 pruebas (las del modelo real usan models/)
 streamlit run app/streamlit_app.py
 ```
 
-Para reproducir todo desde la base cruda, ejecuta los notebooks en orden (≈ 25 minutos en un portátil):
+Para reproducir todas las decisiones desde la base cruda, ejecuta los notebooks **01 a 06** en orden (≈ 20 minutos en un portátil):
 
 ```bash
 cd notebooks
-for n in 01_caso_negocio 02_eda 03_preprocesamiento 04_features 05_torneo 06_optimizacion 07_validacion_interpretacion 08_registro_modelo 09_inferencia; do
+for n in 01_caso_negocio 02_eda 03_preprocesamiento 04_features 05_torneo 06_optimizacion; do
   jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=3600 $n.ipynb
 done
+cd ..
+git status --short reports/   # si la reproducción es exacta, las tablas y JSON de reports/ no cambian
 ```
 
 En Windows (PowerShell) define antes `$env:PYTHONUTF8=1`.
+
+**No ejecutes el notebook 07** (ni el 08 y el 09, que dependen de él): el 07 abre el conjunto de prueba y agrega
+una línea a `reports/prueba_abierta.txt`. La prueba ya se abrió y sus resultados están en
+`reports/07_metricas_test.json` y `reports/07_validacion.md`; volver a abrirla sería una apertura más. Para comprobar
+el modelo final usa `pytest -q` y la app, que cargan `models/model.joblib` desde el repositorio.
 
 **Windows: error al cargar LightGBM.** Si `import lightgbm` (notebooks 08 y 09, o la app) falla con
 `Could not find module '...lib_lightgbm.dll' (or one of its dependencies)`, falta el **Microsoft Visual C++
