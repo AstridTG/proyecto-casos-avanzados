@@ -153,6 +153,30 @@ Seis candidatos con los mismos pliegues por cliente: tasa base sin modelo, **reg
 4. `pytest -q` (57 pruebas).
 5. `streamlit run app/streamlit_app.py`.
 
+## Anexo: cómo se documentó el trabajo (Spec Kit)
+
+- **Lo que pedía el curso:** trabajar con Spec Kit, es decir, especificación → plan → tareas → código, con los
+  archivos `specs/<nº>/spec.md`, `plan.md` y `tasks.md` generados con `/speckit-specify`, `/speckit-plan` y
+  `/speckit-tasks`, y aprobados antes de escribir el código de cada pieza.
+- **Lo que hicimos:** Spec Kit quedó instalado (`.specify/`, con la constitución en `.specify/memory/constitution.md`
+  y las plantillas), pero **no generamos la carpeta `specs/`**. El proyecto entró completo en un solo commit
+  (`fdc6cf3`, 31-oct-2026, etapas 01 a 09 y app).
+- **Motivo:** no tuvimos claro que había que correr esos tres comandos para cada pieza de trabajo. Lo reconocemos
+  como una **omisión del proceso**, no como una decisión.
+- **Qué hizo de especificación en su lugar:**
+  - `especificacion-proyecto.md`: caso, métrica, línea base, riesgos de fuga y la tabla de decisiones fechadas
+    (sección 7).
+  - `especificaciones/02-eda.md` y `especificaciones/03-preprocesamiento.md`: se llenaron antes de programar, con
+    las reglas de limpieza, la forma de partir y las pruebas que debían existir, y se marcaron sus casillas al verlas
+    funcionando.
+  - `reports/`: cada etapa deja escritas sus decisiones con su motivo.
+- **Qué falta por eso:** las etapas 04 a 09 (variables, torneo, optimización, validación, registro y app) **no
+  tienen** especificación escrita antes del código ni lista de tareas aprobada. Sus reglas (por ejemplo, la de
+  elección del modelo en el notebook 06) se escribieron dentro de los notebooks y en `reports/`. Por eso el grupo
+  revisa ese código con `checklist-revision-ia.md` y sin un `tasks.md` contra el cual comparar.
+- **Lección:** en una versión 2.0, cada pieza nueva empezaría con `specs/<nº>/spec.md`, `plan.md` y `tasks.md`
+  aprobados por el grupo antes de escribir código.
+
 ---
 
 ### Lista de comprobación antes de entregar
