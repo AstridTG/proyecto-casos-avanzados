@@ -1,0 +1,10 @@
+# Tema visual de la app LibranzaRadar (color principal de Comfama).
+# Streamlit lee este archivo al arrancar desde la raíz del repositorio.
+# Color dado por el grupo en Excel: RGB(255, 0, 122) = #FF007A (magenta).
+
+[theme]
+base = "light"
+# Botones, sliders, casillas, enlaces y acentos.
+primaryColor = "#FF007A"
+# Fondo de la barra lateral y de los campos del formulario (tono claro del mismo color).
+secondaryBackgroundColor = "#FFEBF5"
