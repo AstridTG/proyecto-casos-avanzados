@@ -61,3 +61,5 @@ footer: "Casos Avanzados · Maestría en Ingeniería Analítica"
 - **Límites:** base **sintética**; mora medida al corte (exposiciones distintas); el umbral del modelo, elegido en validación, casi no marca créditos.
 - **Uso responsable:** no usa sexo, estado civil ni edad. Vigilar las tasas de marcado por ciudad.
 - **Recomendación:** hoy, priorizar con la **regla del plazo corto** (transparente y mejor que el modelo con su umbral). Para mejorar de verdad, **capturar mejores datos al aprobar:** capacidad de pago, endeudamiento en centrales de riesgo, antigüedad laboral y salud de la empresa pagadora.
+
+> **LibranzaRadar 2.0 (escenario futuro):** si la caja revisa 1 de cada 5 créditos (80 % de los créditos al día sin alerta), ordenar por **pérdida esperada = probabilidad × monto** cubre ≈ **75 % del dinero** que cae en mora, frente a ≈ 14 % del modelo actual y ≈ 20 % al azar. Hoy esa ganancia la da el monto; el modelo sumará con mejores datos. *Cifras de validación; requiere una prueba nueva.*
