@@ -118,6 +118,32 @@ Seis candidatos con los mismos pliegues por cliente: tasa base sin modelo, **reg
 - **Uso responsable:** sin sexo, estado civil ni edad. La ciudad sí entra y puede actuar como aproximación socioeconómica: vigilar las tasas de marcado por ciudad.
 - **Mejora concreta:** capturar al aprobar **capacidad de pago** (ingreso y descuentos de nómina vigentes), **endeudamiento en centrales de riesgo**, **antigüedad laboral** y la **salud financiera de la empresa pagadora**. Con eso, reentrenar con el mismo pipeline (notebooks 03–09) y volver a compararlo contra la regla del plazo corto. En producción, vigilar la tasa de mora de los priorizados frente a los no priorizados.
 
+### 9.1 Escenario futuro: LibranzaRadar 2.0 con contención del 80 %
+
+> Fuente: `reports/10_escenario_v2_contencion80.md` (5-nov-2026). **Solo es un escenario:** no cambia el modelo, el
+> umbral congelado ni la app, y **no se abrió la prueba**. Las cifras son predicciones fuera de pliegue del
+> entrenamiento (36.872 créditos, validación por cliente) e intervalos del 95 % remuestreando clientes completos.
+
+- **Qué es:** fijar el umbral para que el **80 % de los créditos al día quede sin alerta**. En la práctica se revisa
+  1 de cada 5 créditos (≈ 490 al mes), frente al 0,1 % que marca hoy el umbral congelado.
+- **Si "recuperar" es detectar más moras:** la mejor opción es ordenar por plazo corto y desempatar con el modelo.
+  Detecta el **24,3 %** de las moras [23,1 ; 25,4], frente a 23,2 % de LightGBM y 20,4 % al azar (≈ 91 moras al mes).
+- **Si "recuperar" es proteger pesos:** la mejor opción es ordenar por **pérdida esperada = probabilidad × monto**.
+  Cubre el **74,6 %** del monto desembolsado de los créditos que caen en mora [72,9 ; 76,1], frente a 13,9 % de
+  LightGBM y 20,2 % al azar.
+- **Las dos metas se contraponen:** las moras se concentran en créditos cortos, que son pequeños.
+- **Límites:**
+  - **En pesos, el modelo no aporta hoy:** ordenar solo por monto da lo mismo (74,9 %; diferencia −0,3 pts [−0,9 ; +0,2]).
+    El resultado lo explica la concentración del dinero en créditos grandes, no una mejor detección del riesgo.
+  - **La precisión queda entre 14 % y 19 %,** por debajo del mínimo del 20 % fijado el 30-oct. Adoptarlo sería cambiar
+    la regla del negocio.
+  - **El monto es el desembolsado,** no la pérdida real (saldo y recuperación se conocen después de aprobar).
+  - **Antes de usarlo hace falta una prueba nueva,** con créditos de un periodo posterior.
+- **Recomendación para la versión 2.0:** priorizar por pérdida esperada, porque en cobranza la recuperación se mide en
+  pesos. La fórmula queda lista para que, cuando el modelo mejore con mejores datos al aprobar, la mejora se note en
+  los pesos. La app 2.0 mostraría la probabilidad, el monto y la pérdida esperada, y dejaría elegir la contención
+  (70 %, 80 %, 90 %) viendo cuántas revisiones al mes implica.
+
 ## Anexo: cómo reproducir el proyecto
 
 1. `uv venv --python 3.12 .venv` y `uv pip install --python .venv/bin/python -r requirements.txt` (en Windows: `.venv/Scripts/python.exe` y `$env:PYTHONUTF8=1`).
